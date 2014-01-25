@@ -46,7 +46,7 @@ static const struct
    const char *determining_filename;
    const char *optional_string;
 } LINUX_VENDOR_INFO[] = {
-   { "FreeBSD",          "freebsd",               "FREEBSD" }
+   { "FreeBSD",          "freebsd",               "FREEBSD" },
    { NULL, NULL, NULL }
 };
 
