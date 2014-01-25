@@ -165,6 +165,11 @@ if [ -z "$platform" ]; then
       libbase=lib
       ;;
 
+    amd64:FreeBSD)
+      platform=FREEBSD_X86_64_GNU
+      libbase=lib
+      ;;
+
     sun*:SunOS)
       platform=SOLARIS_SPARC_64_CC
       libbase=lib/64
