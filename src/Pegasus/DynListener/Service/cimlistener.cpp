@@ -216,9 +216,9 @@ static const char OPTION_SHUTDOWN    = 's';
 
 static const char OPTION_NO_DAEMON [] = "--nodaemon";
 
-static const char   LONG_HELP []  = "help";
+static const __unused char   LONG_HELP []  = "help";
 
-static const char   LONG_VERSION []  = "version";
+static const __unused char   LONG_VERSION []  = "version";
 
 static const char OPTION_DEBUGOUTPUT = 'X';
 
@@ -608,6 +608,7 @@ int CIMListenerProcess::cimserver_run(
         //cimserver_kill(1);
 #else
 #if defined(PEGASUS_OS_HPUX) || defined(PEGASUS_OS_LINUX) \
+	|| defined(PEGASUS_OS_FREEBSD) \
         || defined(PEGASUS_OS_ZOS) \
         || defined(PEGASUS_OS_AIX) || defined(PEGASUS_OS_PASE) \
         || defined(PEGASUS_OS_SOLARIS) \
@@ -768,6 +769,7 @@ MessageLoader::_useProcessLocale = false;
     }
 
 #if defined(PEGASUS_OS_HPUX) || defined(PEGASUS_PLATFORM_LINUX_GENERIC_GNU) \
+|| defined(PEGASUS_PLATFORM_FREEBSD_GENERIC_GNU) \
 || defined(PEGASUS_OS_ZOS) || defined(PEGASUS_OS_AIX) \
 || defined(PEGASUS_OS_PASE) \
 || defined(PEGASUS_OS_SOLARIS) || defined (PEGASUS_OS_VMS)
@@ -869,6 +871,7 @@ MessageLoader::_useProcessLocale = false;
         _cimListenerProcess->notify_parent(0);
 
 #if defined(PEGASUS_OS_HPUX) || defined(PEGASUS_OS_LINUX) || \
+    defined(PEGASUS_OS_FREEBSD) || \
     defined(PEGASUS_OS_ZOS) || defined(PEGASUS_OS_AIX) || \
     defined(PEGASUS_OS_PASE) || \
     defined(PEGASUS_OS_SOLARIS) || defined(PEGASUS_OS_VMS)

@@ -333,7 +333,7 @@ Uint32 CIMRepositoryArchiveCommand::execute(
 
     // Define the "tar" command location based on the platform
 #if defined(PEGASUS_OS_HPUX) || defined(PEGASUS_OS_AIX) || \
-  defined(PEGASUS_OS_PASE)
+  defined(PEGASUS_OS_PASE) || defined(PEGASUS_OS_FREEBSD)
     const char TAR_COMMAND[] = "/usr/bin/tar";
 #elif defined(PEGASUS_OS_LINUX)
     const char TAR_COMMAND[] = "/bin/tar";

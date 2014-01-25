@@ -34,6 +34,8 @@
 # include "lslp-windows.cpp"
 #elif defined(PEGASUS_OS_LINUX)
 # include "lslp-linux.cpp"
+#elif defined(PEGASUS_OS_FREEBSD)
+# include "lslp-freebsd.cpp"
 #elif defined(PEGASUS_OS_ZOS) || defined(PEGASUS_OS_SOLARIS)
 # include "lslp-linux.cpp"
 #elif defined(PEGASUS_OS_AIX) || defined(PEGASUS_OS_PASE)

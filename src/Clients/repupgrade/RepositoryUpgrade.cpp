@@ -223,16 +223,16 @@ static const char NEW_CLASS_RETRIEVAL_ERROR [] =
 static const char NEW_CLASS_RETRIEVAL_ERROR_KEY [] =
            "Clients.repupgrade.RepositoryUpgrade.NEW_CLASS_RETRIEVAL_ERROR";
 
-static const char LIBRARY_LOAD_ERROR [] =
+static const __unused char LIBRARY_LOAD_ERROR [] =
                 "Error loading special handling library $0.";
 
-static const char LIBRARY_LOAD_ERROR_KEY [] =
+static const __unused char LIBRARY_LOAD_ERROR_KEY [] =
                 "Clients.repupgrade.RepositoryUpgrade.LIBRARY_LOAD_ERROR";
 
-static const char LIBRARY_ENTRY_POINT_ERROR [] =
+static const __unused char LIBRARY_ENTRY_POINT_ERROR [] =
                 "Error trying to get entry point symbol in library $0.";
 
-static const char LIBRARY_ENTRY_POINT_ERROR_KEY [] =
+static const __unused char LIBRARY_ENTRY_POINT_ERROR_KEY [] =
     "Clients.repupgrade.RepositoryUpgrade.LIBRARY_ENTRY_POINT_ERROR";
 
 static const char CLASS_XML_OUTPUT_FILE [] =
@@ -314,7 +314,7 @@ const char* RepositoryUpgrade::_ALL = "a";
     const String OLD_REPOSITORY_PATH = "/wbem_var/opt/wbem/prev_repository";
     const String NEW_REPOSITORY_PATH = "/wbem_var/opt/wbem/repository";
     const String RepositoryUpgrade::_LOG_PATH  = "/wbem_var/opt/wbem/upgrade";
-# elif defined(PEGASUS_OS_LINUX)
+# elif defined(PEGASUS_OS_LINUX) || defined(PEGASUS_OS_FREEBSD)
     const String OLD_REPOSITORY_PATH = "/var/opt/tog-pegasus/prev_repository";
     const String NEW_REPOSITORY_PATH = "/var/opt/tog-pegasus/repository";
     const String RepositoryUpgrade::_LOG_PATH  =

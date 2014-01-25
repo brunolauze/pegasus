@@ -714,6 +714,7 @@ int CIMServerProcess::cimserver_run(
     }
 
 #if defined(PEGASUS_OS_HPUX) || defined(PEGASUS_PLATFORM_LINUX_GENERIC_GNU) \
+|| defined(PEGASUS_PLATFORM_FREEBSD_GENERIC_GNU) \
 || defined(PEGASUS_OS_ZOS) || defined(PEGASUS_OS_AIX) \
 || defined(PEGASUS_OS_SOLARIS) || defined (PEGASUS_OS_VMS)
     umask(S_IWGRP|S_IWOTH);
@@ -834,6 +835,7 @@ int CIMServerProcess::cimserver_run(
 
 #if defined(PEGASUS_OS_HPUX) || \
     defined(PEGASUS_OS_LINUX) || \
+    defined(PEGASUS_OS_FREEBSD) || \
     defined(PEGASUS_OS_ZOS) || \
     defined(PEGASUS_OS_AIX) || \
     defined(PEGASUS_OS_SOLARIS) || \

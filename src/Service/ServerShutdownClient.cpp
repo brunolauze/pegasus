@@ -80,6 +80,7 @@ void ServerShutdownClient::_waitForTerminationOrTimeout(Uint32 maxWaitTime)
         Boolean wasKilled = _serverRunStatus->kill();
 
 #if defined(PEGASUS_OS_HPUX) || defined(PEGASUS_PLATFORM_LINUX_GENERIC_GNU) \
+|| defined(PEGAGUS_PLATFORM_FREEBSD_GENERIC_GNU) \
 || defined(PEGASUS_OS_ZOS) || defined(PEGASUS_OS_SOLARIS) \
 || defined (PEGASUS_OS_VMS)
         if (wasKilled)
@@ -92,6 +93,11 @@ void ServerShutdownClient::_waitForTerminationOrTimeout(Uint32 maxWaitTime)
             cout << MessageLoader::getMessage(parms) << endl;
             exit (0);
         }
+#else
+	if (wasKilled)
+	{
+		//would not be used othwerwise
+	}
 #endif
     }
 }

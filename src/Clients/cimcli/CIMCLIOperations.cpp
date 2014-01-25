@@ -527,7 +527,7 @@ OperationExampleEntry OperationExamples[] = {
     "    No options Required"},
 };
 
-const Uint32 NUM_EXAMPLES = sizeof(OperationExamples) /
+const __unused Uint32 NUM_EXAMPLES = sizeof(OperationExamples) /
                             sizeof(OperationExamples[0]);
 
 

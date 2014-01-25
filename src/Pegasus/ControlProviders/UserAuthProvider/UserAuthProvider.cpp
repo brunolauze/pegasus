@@ -73,9 +73,9 @@ static const CIMName PROPERTY_NAME_USERNAME = CIMNameCast("Username");
 
 static const CIMName PROPERTY_NAME_PASSWORD = CIMNameCast("Password");
 
-static const char OLD_PASSWORD[] = "OldPassword";
+static const __unused char OLD_PASSWORD[] = "OldPassword";
 
-static const char NEW_PASSWORD[] = "NewPassword";
+static const __unused char NEW_PASSWORD[] = "NewPassword";
 
 /**
     The constants representing the namespace and authorization

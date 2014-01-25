@@ -238,9 +238,9 @@ static const char OPTION_HOME        = 'D';
 
 static const char OPTION_SHUTDOWN    = 's';
 
-static const char LONG_HELP[]        = "help";
+static const __unused char LONG_HELP[]        = "help";
 
-static const char LONG_VERSION[]     = "version";
+static const __unused char LONG_VERSION[]     = "version";
 
 static const char OPTION_DEBUGOUTPUT = 'X';
 

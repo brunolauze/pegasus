@@ -169,7 +169,7 @@ uint16 slp_service_agent::_getSLPPort()
 
     if ((serv = getservbyname_r(
         SLP_SERVICE_NAME, "udp", &serv_result, buf, SERV_BUF_SIZE)) != NULL)
-#elif defined(PEGASUS_OS_LINUX)
+#elif defined(PEGASUS_OS_LINUX) || defined(PEGASUS_OS_FREEBSD)
 
     int ret = getservbyname_r(
         SLP_SERVICE_NAME,
