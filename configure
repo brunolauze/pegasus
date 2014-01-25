@@ -159,6 +159,11 @@ if [ -z "$platform" ]; then
       platform=LINUX_X86_64_GNU
       libbase=lib64
       ;;
+ 
+    x86_64:FreeBSD)
+      platform=FREEBSD_X86_64_GNU
+      libbase=lib
+      ;;
 
     sun*:SunOS)
       platform=SOLARIS_SPARC_64_CC
