@@ -54,7 +54,7 @@ extern char** environ;
 
 #ifdef PEGASUS_ENABLE_AUDIT_LOGGER
 
-#if defined(PEGASUS_OS_SOLARIS)
+#if defined(PEGASUS_OS_SOLARIS) || defined(PEGASUS_OS_FREEBSD)
 extern char** environ;
 #endif
 

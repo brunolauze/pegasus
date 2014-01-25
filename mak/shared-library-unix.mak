@@ -251,6 +251,10 @@ $(FULL_LIB): $(LIB_DIR)/target $(OBJ_DIR)/target $(OBJECTS) $(FULL_LIBRARIES) \
 	$(MAKE) --directory=$(LIB_DIR) -f $(PEGASUS_ROOT)/mak/library-unix.mak \
             ln LIBRARY=lib$(LIBRARY) SUFFIX=$(LIB_SUFFIX) PLATFORM_SUFFIX=so
     endif
+    ifdef PEGASUS_PLATFORM_FREEBSD_GENERIC_GNU
+	$(MAKE) --directory=$(LIB_DIR) -f $(PEGASUS_ROOT)/mak/library-unix.mak \
+	    ln LIBRARY=lib$(LIBRARY) SUFFIX=$(LIB_SUFFIX) PLATFORM_SUFFIX=so
+    endif
 	$(TOUCH) $(FULL_LIB)
 	@ $(ECHO)
 
@@ -296,5 +300,8 @@ ifeq ($(PEGASUS_PLATFORM),HPUX_IA64_GNU)
     FILES_TO_CLEAN += $(LIB_DIR)/lib$(LIBRARY).so
 endif
 ifdef PEGASUS_PLATFORM_LINUX_GENERIC_GNU
+    FILES_TO_CLEAN += $(LIB_DIR)/lib$(LIBRARY).so
+endif
+ifdef PEGASUS_PLATFORM_FREEBSD_GENERIC_GNU
     FILES_TO_CLEAN += $(LIB_DIR)/lib$(LIBRARY).so
 endif

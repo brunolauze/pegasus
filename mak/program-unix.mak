@@ -65,6 +65,21 @@ ifdef PEGASUS_PLATFORM_LINUX_GENERIC_GNU
     endif
 endif
 
+
+ifdef PEGASUS_PLATFORM_FREEBSD_GENERIC_GNU
+    ifdef PEGASUS_USE_RELEASE_DIRS
+        EXTRA_LINK_FLAGS += $(LINK_RPATH) $(LINK_DEST_LIB) $(LINK_RPATH_LINK) $(LINK_LIB_DIR)
+    else
+        EXTRA_LINK_FLAGS += $(LINK_RPATH) $(LINK_LIB_DIR)
+    endif
+
+    ifeq ($(HAS_ICU_DEPENDENCY),true)
+        ifdef ICU_INSTALL
+            EXTRA_LINK_FLAGS += $(LINK_RPATH) -Xlinker ${ICU_INSTALL}/lib
+        endif
+    endif
+endif
+
 ifdef PEGASUS_PURIFY
     PUREOPTIONS = -follow-child-processes=yes -locking=no \
         -always-use-cache-dir -cache-dir=$(PURIFY_TMP)/cache \

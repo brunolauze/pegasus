@@ -128,9 +128,9 @@ static const char _MSG_NO_PROVIDER_KEY[] =
 static const char _MSG_NO_PROVIDER[] =
     "Subscription ($0) in namespace $1 has no provider";
 
-static const char _MSG_STATE_CHANGE_FAILED_KEY[] =
+static const __unused char _MSG_STATE_CHANGE_FAILED_KEY[] =
     "IndicationService.IndicationService.STATE_CHANGE_FAILED";
-static const char _MSG_STATE_CHANGE_FAILED[] =
+static const __unused char _MSG_STATE_CHANGE_FAILED[] =
     "The requested state change failed : $0. Current IndicationService"
         " EnabledState : $1, HealthState : $2.";
 

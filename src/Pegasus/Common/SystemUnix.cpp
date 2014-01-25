@@ -30,7 +30,8 @@
 //%/////////////////////////////////////////////////////////////////////////////
 
 #if !defined(PEGASUS_OS_ZOS) && \
-    !defined(PEGASUS_OS_DARWIN)
+    !defined(PEGASUS_OS_DARWIN) && \
+    !defined(PEGASUS_OS_FREEBSD)
 # include <crypt.h>
 #endif
 

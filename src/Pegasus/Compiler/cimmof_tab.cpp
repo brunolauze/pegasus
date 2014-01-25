@@ -259,7 +259,11 @@
 #if defined(PEGASUS_OS_DARWIN)
 #include <sys/malloc.h>
 #else
+#if defined(PEGASUS_OS_FREEBSD)
+#include <stdlib.h>
+#else
 #include <malloc.h>
+#endif
 #endif
 #endif
 #include <cstdio>

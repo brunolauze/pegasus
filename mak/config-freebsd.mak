@@ -93,7 +93,7 @@ LIB_SUFFIX = .so.$(MAJOR_VERSION_NUMBER)
 
 DEFINES += -DPEGASUS_USE_SYSLOGS
 
-SYS_LIBS = -ldl -lpthread -lcrypt
+SYS_LIBS = -lpthread -lcrypt
 
 ifeq ($(COMPILER), clang)
     FLAGS += -W -Wall -Wno-unused-parameter  -Wno-unused-value -D_GNU_SOURCE \
