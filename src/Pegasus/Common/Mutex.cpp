@@ -191,7 +191,7 @@ void Mutex::unlock()
     PEGASUS_FCT_EXECUTE_AND_ASSERT(0, pthread_mutex_unlock(&_rep.mutex));
 }
 
-#if defined(PEGASUS_OS_LINUX)
+#if defined(PEGASUS_OS_LINUX) || defined(PEGASUS_OS_FREEBSD)
 void Mutex::reinitialize()
 {
     pthread_mutex_init(&_rep.mutex, &_attr);

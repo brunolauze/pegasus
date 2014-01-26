@@ -539,6 +539,7 @@ Boolean FileSystem::changeFileOwner(
 #if defined(PEGASUS_OS_SOLARIS) || \
     defined(PEGASUS_OS_HPUX) || \
     defined(PEGASUS_OS_LINUX) || \
+    defined(PEGASUS_OS_FREEBSD) || \
     defined (PEGASUS_OS_VMS) || \
     defined (PEGASUS_OS_AIX)
 

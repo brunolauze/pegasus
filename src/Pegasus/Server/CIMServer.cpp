@@ -35,7 +35,7 @@
 #include <cctype>
 #include <ctime>
 
-#if (defined(PEGASUS_OS_HPUX) || defined(PEGASUS_OS_LINUX)) \
+#if (defined(PEGASUS_OS_HPUX) || defined(PEGASUS_OS_LINUX) || defined(PEGASUS_OS_FREEBSD)) \
     && defined(PEGASUS_USE_RELEASE_DIRS)
 # include <unistd.h>
 # include <errno.h>
@@ -283,7 +283,7 @@ void CIMServer::_init()
 
     _monitor.reset(new Monitor());
 
-#if (defined(PEGASUS_OS_HPUX) || defined(PEGASUS_OS_LINUX)) \
+#if (defined(PEGASUS_OS_HPUX) || defined(PEGASUS_OS_LINUX) || defined(PEGASUS_OS_FREEBSD)) \
     && defined(PEGASUS_USE_RELEASE_DIRS)
     if (chdir(PEGASUS_CORE_DIR) != 0)
     {

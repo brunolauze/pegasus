@@ -290,21 +290,21 @@
 #  define PEGASUS_CIMSERVER_START_FILE      "/var/run/tog-pegasus/cimserver.pid"
 #  define PEGASUS_CIMSERVER_START_LOCK_FILE \
     "/var/run/tog-pegasus/cimserver_start.lock"
-#  define PEGASUS_REPOSITORY_DIR            "/var/opt/tog-pegasus/repository"
+#  define PEGASUS_REPOSITORY_DIR            "/usr/local/share/pegasus/repository"
 #  define PEGASUS_CURRENT_CONFIG_FILE_PATH  \
-    "/var/opt/tog-pegasus/cimserver_current.conf"
+    "/usr/local/etc/cimserver_current.conf"
 #  define PEGASUS_PLANNED_CONFIG_FILE_PATH  \
-    "/var/opt/tog-pegasus/cimserver_planned.conf"
-#  define PEGASUS_SSLCLIENT_CERTIFICATEFILE "/etc/opt/tog-pegasus/client.pem"
-#  define PEGASUS_SSLCLIENT_RANDOMFILE      "/var/opt/tog-pegasus/ssl.rnd"
-#  define PEGASUS_SSLSERVER_RANDOMFILE      "/var/opt/tog-pegasus/cimserver.rnd"
+    "/usr/local/etc/cimserver_planned.conf"
+#  define PEGASUS_SSLCLIENT_CERTIFICATEFILE "/usr/local/etc/pegasus/client.pem"
+#  define PEGASUS_SSLCLIENT_RANDOMFILE      "/usr/local/etc/pegasus/ssl.rnd"
+#  define PEGASUS_SSLSERVER_RANDOMFILE      "/usr/local/etc/pegasus/cimserver.rnd"
 #  define PEGASUS_LOCAL_AUTH_DIR            \
-    "/var/opt/tog-pegasus/cache/localauth"
+    "/usr/local/etc/pegasus/cache/localauth"
 #  define PEGASUS_LOCAL_DOMAIN_SOCKET_PATH  \
     "/var/run/tog-pegasus/socket/cimxml.socket"
-#  define PEGASUS_CORE_DIR                  "/var/opt/tog-pegasus/cache"
-#  define PEGASUS_PAM_STANDALONE_PROC_NAME  "/opt/tog-pegasus/sbin/cimservera"
-#  define PEGASUS_PROVIDER_AGENT_PROC_NAME  "/opt/tog-pegasus/sbin/cimprovagt"
+#  define PEGASUS_CORE_DIR                  "/usr/local/etc/pegasus/cache"
+#  define PEGASUS_PAM_STANDALONE_PROC_NAME  "/usr/local/sbin/cimservera"
+#  define PEGASUS_PROVIDER_AGENT_PROC_NAME  "/usr/local/sbin/cimprovagt"
 #  undef PEGASUS_DEFAULT_MESSAGE_SOURCE     /* Not defined */
 # elif defined(PEGASUS_OS_VMS)
 #  define PEGASUS_CIMSERVER_START_FILE      \

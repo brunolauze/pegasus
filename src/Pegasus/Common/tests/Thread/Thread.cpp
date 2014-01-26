@@ -37,7 +37,7 @@
 #else
 #include <unistd.h>
 #endif
-#if defined(PEGASUS_OS_HPUX) || defined(PEGASUS_OS_LINUX)
+#if defined(PEGASUS_OS_HPUX) || defined(PEGASUS_OS_LINUX) || defined(PEGASUS_OS_FREEBSD)
 # include <memory>
 #endif
 #include <Pegasus/Common/PegasusAssert.h>

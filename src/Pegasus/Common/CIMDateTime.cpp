@@ -1417,7 +1417,7 @@ CIMDateTime CIMDateTime::getCurrentDateTime()
             // Assume 1 hour.
             tzMinutesEast += 60;
         }
-# elif defined(PEGASUS_OS_LINUX) || defined(PEGASUS_OS_VMS)
+# elif defined(PEGASUS_OS_LINUX) || defined(PEGASUS_OS_FREEBSD) || defined(PEGASUS_OS_VMS)
         tzMinutesEast = (int) tmval->tm_gmtoff/60;
 # else
         tzMinutesEast = -tz.tz_minuteswest;

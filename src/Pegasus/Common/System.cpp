@@ -819,6 +819,7 @@ Boolean System::isLocalHost(const String &hostName)
     //       should define their platform here,
     //        as this is the superior way to work
 #if defined(PEGASUS_OS_LINUX) || \
+    defined(PEGASUS_OS_FREEBSD) || \
     defined(PEGASUS_OS_AIX) || \
     defined(PEGASUS_OS_HPUX) || \
     defined(PEGASUS_OS_PASE) || \

@@ -234,7 +234,7 @@ Uint32 System::lookupPort(
 
     if ( (serv = getservbyname_r(serviceName, TCP, &serv_result,
                                  buf, SERV_BUFF_SIZE)) != NULL )
-#elif defined(PEGASUS_OS_LINUX)
+#elif defined(PEGASUS_OS_LINUX) || defined(PEGASUS_OS_FREEBSD)
 # define SERV_BUFF_SIZE 1024
     struct servent serv_result;
     char buf[SERV_BUFF_SIZE];

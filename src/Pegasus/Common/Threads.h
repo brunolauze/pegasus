@@ -209,7 +209,7 @@ inline void Threads::exit(ThreadReturnType rc)
 
 inline void Threads::yield()
 {
-#ifdef PEGASUS_OS_LINUX
+#if defined(PEGASUS_OS_LINUX) || defined(PEGASUS_OS_FREEBSD)
     pthread_yield();
 #else
     sched_yield();

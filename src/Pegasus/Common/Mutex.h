@@ -114,7 +114,7 @@ public:
 
     void unlock();
 
-#if defined(PEGASUS_OS_LINUX)
+#if defined(PEGASUS_OS_LINUX) || defined(PEGASUS_OS_FREEBSD)
     /**
         This method must only be called after a fork() to reset the mutex
         lock status in the new process.  Any other use of this method is
