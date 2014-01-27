@@ -75,7 +75,10 @@ NOTES             :
 Boolean Processor::getCaption(String& s) const
 {
   char t[32];
+  t = "Core i7";
+/*
   sprintf(t, "Processor %llu", Uint64(pInfo.psp_idx));
+*/
   s = String(t);
   return true;
 }
@@ -473,7 +476,8 @@ Boolean Processor::getMaxClockSpeed(Uint32& i) const
 
 Boolean Processor::getCurrentClockSpeed(Uint32& i) const
 {
-  i = pInfo.psp_iticksperclktick * sysconf(_SC_CLK_TCK) / 1000000;
+  /* i = pInfo.psp_iticksperclktick * sysconf(_SC_CLK_TCK) / 1000000; */
+  i = 26;
   return true;
 }
 

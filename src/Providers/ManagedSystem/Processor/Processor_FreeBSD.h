@@ -54,8 +54,6 @@
 
 #include <sys/dirent.h>   // readdir
 #include <sys/param.h>    // pstat
-#include <sys/pstat.h>    // pstat
-#include <devnm.h>        // devnm
 #include <sys/stat.h>     // stat
 #include <sys/utsname.h>  // uname
 #include <unistd.h>       // gethostname
@@ -149,7 +147,6 @@ public:
   static String getSysName(void);
 
 private:
-  struct pst_processor pInfo;
   int index; // save index of this processor
 };
 

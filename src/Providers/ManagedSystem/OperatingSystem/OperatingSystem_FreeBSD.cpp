@@ -282,9 +282,9 @@ Boolean OperatingSystem::getTotalSwapSpaceSize(Uint64& mTotalSwapSpaceSize)
 Boolean OperatingSystem::getTotalVirtualMemorySize(Uint64& total)
 {
     int mib[2] = { CTL_HW, HW_REALMEM };
-    size_t len = sizeof(memory);
+    size_t len = sizeof(total);
 
-    if (sysctl(mib, 2, &memory, &len, NULL, 0) == -1)
+    if (sysctl(mib, 2, &total, &len, NULL, 0) == -1)
     {
         return false;
     }

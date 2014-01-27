@@ -44,8 +44,10 @@
 
 #if defined(PEGASUS_PLATFORM_HPUX_ACC)
 #include "IP_HPUX.cpp"
+/*
 #elif defined (PEGASUS_OS_FREEBSD)
-/* #include "IP_FreeBSD.cpp" */
+#include "IP_FreeBSD.cpp" 
+*/
 #elif defined (PEGASUS_OS_VMS)
 #include "IP_Vms.cpp"
 #else
