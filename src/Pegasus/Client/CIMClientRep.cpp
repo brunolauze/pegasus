@@ -1343,3 +1343,33 @@ void ClientTrace::setup()
     }
 }
 PEGASUS_NAMESPACE_END
+
+static const __unused char* CIMExecQuery(char* nameSpace, char* language, char* query)
+{
+Pegasus::CIMClientRep client;
+Pegasus::Buffer buf;
+
+try
+{
+  client.connectLocal();
+  Pegasus::CIMNamespaceName NAMESPACE(nameSpace);
+
+  Pegasus::CIMResponseData response = client.execQuery(NAMESPACE,Pegasus::String(language),
+                                    Pegasus::String(query));
+
+
+  response.encodeXmlResponse(buf);
+  printf(buf.getData());
+}
+catch(Pegasus::Exception& e)
+{
+  client.disconnect();
+  return "";
+}
+
+client.disconnect();
+
+return buf.getData();
+
+}
+
