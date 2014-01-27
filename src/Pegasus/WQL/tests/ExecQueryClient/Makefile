@@ -30,13 +30,9 @@ ROOT = ../../../../..
 include $(ROOT)/mak/config.mak
 include $(ROOT)/src/Pegasus/Client/tests/libraries.mak
 
-PROGRAM = cimquery
+LIBRARY = peginterop
 
 SOURCES = ExecQueryClient.cpp
 
-include $(ROOT)/mak/program.mak
+include $(ROOT)/mak/library.mak
 
-tests:
-
-poststarttests:
-	$(PROGRAM)
