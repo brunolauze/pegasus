@@ -664,6 +664,8 @@ endif
 # Allow ExecQuery functionality to be enabled
 ifndef PEGASUS_ENABLE_EXECQUERY
     DEFINES += -DPEGASUS_DISABLE_EXECQUERY
+else
+  DEFINES += -DPEGASUS_ENABLE_EXECQUERY
 endif
 
 # Allow System Log Handler to be enabled
