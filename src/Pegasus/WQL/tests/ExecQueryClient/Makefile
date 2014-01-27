@@ -30,6 +30,8 @@ ROOT = ../../../../..
 include $(ROOT)/mak/config.mak
 include $(ROOT)/src/Pegasus/Client/tests/libraries.mak
 
+LOCAL_DEFINES = -fms-extensions -U__declspec
+
 LIBRARY = peginterop
 
 SOURCES = ExecQueryClient.cpp
