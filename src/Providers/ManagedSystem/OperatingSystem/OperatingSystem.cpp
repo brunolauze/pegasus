@@ -47,6 +47,8 @@ PEGASUS_USING_PEGASUS;
 # include "OperatingSystem_Windows.cpp"
 #elif defined (PEGASUS_PLATFORM_LINUX_GENERIC_GNU)
 # include "OperatingSystem_Linux.cpp"
+#elif defined (PEGASUS_PLATFORM_FREEBSD_GENERIC_GNU)
+# include "OperatingSystem_FreeBSD.cpp"
 #elif defined (PEGASUS_OS_AIX)
 # include "OperatingSystem_AIX.cpp"
 #elif defined (PEGASUS_OS_DARWIN)

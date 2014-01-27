@@ -45,6 +45,8 @@
 
 #ifdef PEGASUS_PLATFORM_HPUX_ACC
 #include "Processor_HPUX.h"
+#elif defined(PEGASUS_OS_FREEBSD)
+#include "Processor_FreeBSD.h"
 #else
 #include "Processor_Stub.h"
 #endif

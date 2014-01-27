@@ -49,6 +49,8 @@
 #include "Process_HPUX.h"
 #elif defined (PEGASUS_PLATFORM_LINUX_GENERIC_GNU)
 #include "Process_Linux.h"
+#elif defined (PEGASUS_PLATFORM_FREEBSD_GENERIC_GNU)
+#include "Process_FreeBSD.h"
 #elif defined (PEGASUS_OS_VMS)
 #include "Process_Vms.h"
 #else

@@ -43,6 +43,8 @@
 
 #ifdef PEGASUS_PLATFORM_HPUX_ACC
 #include "Processor_HPUX.cpp"
+#elif defined(PEGASUS_OS_FREEBSD)
+#include "Processor_FreeBSD.cpp"
 #elif defined (PEGASUS_OS_VMS)
 #include "Processor_Vms.cpp"
 #else

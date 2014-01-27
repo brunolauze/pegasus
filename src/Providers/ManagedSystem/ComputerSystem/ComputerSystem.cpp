@@ -41,6 +41,8 @@
 #else
 # if defined(PEGASUS_PLATFORM_LINUX_GENERIC_GNU)
 #  include "ComputerSystem_Linux.cpp"
+# if defined(PEGASUS_PLATFORM_FREEBSD_GENERIC_GNU)
+#  include "ComputerSystem_FreeBSD.cpp"
 # elif defined(PEGASUS_OS_VMS)
 #  include "ComputerSystem_Vms.cpp"
 # else
