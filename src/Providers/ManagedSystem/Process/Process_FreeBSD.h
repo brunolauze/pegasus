@@ -29,8 +29,8 @@
 //
 //%////////////////////////////////////////////////////////////////////////////
 
-#ifndef PG_PROCESS_LINUX_H
-#define PG_PROCESS_LINUX_H
+#ifndef PG_PROCESS_FREEBSD_H
+#define PG_PROCESS_FREEBSD_H
 
 /* ==========================================================================
    Includes.

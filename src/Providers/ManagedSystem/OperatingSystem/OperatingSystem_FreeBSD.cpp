@@ -203,6 +203,7 @@ static CIMDateTime time_t_to_CIMDateTime(time_t *time_to_represent)
 
 Boolean OperatingSystem::getLastBootUpTime(CIMDateTime& lastBootUpTime)
 {
+/*
     int mib[2] = { CTL_KERN, KERN_BOOTTIME };
     struct timeval   tv;
     size_t len = sizeof(tv);
@@ -216,15 +217,20 @@ Boolean OperatingSystem::getLastBootUpTime(CIMDateTime& lastBootUpTime)
         lastBootUpTime = time_t_to_CIMDateTime(&(tv.tv_sec));
         return true;
     }
+*/
+return false;
 }
 
 Boolean OperatingSystem::getLocalDateTime(CIMDateTime& localDateTime)
 {
+/*
    time_t now;
 
    now = time(NULL);
    localDateTime = time_t_to_CIMDateTime(&now);
    return true;
+*/
+return false;
 }
 
 Boolean OperatingSystem::getCurrentTimeZone(Sint16& currentTimeZone)
@@ -348,6 +354,7 @@ Boolean OperatingSystem::getMaxProcsPerUser(Uint32& maxProcsPerUser)
 
 Boolean OperatingSystem::getSystemUpTime(Uint64& mUpTime)
 {
+/*
     int mib[2] = { CTL_KERN, KERN_BOOTTIME };
     struct timeval   tv;
     size_t len = sizeof(tv);
@@ -363,6 +370,8 @@ Boolean OperatingSystem::getSystemUpTime(Uint64& mUpTime)
         mUpTime = difftime(now,tv.tv_sec);
         return true;
     }
+*/
+    return false
 }
 
 Boolean OperatingSystem::getOperatingSystemCapability(String& scapability)

@@ -303,8 +303,10 @@ Boolean Process::getKernelModeTime(Uint64& i64) const
 {
   // time obtained in seconds from pstat needs to be
   // returned in milliseconds
+  /*
   i64 = 1000 * pInfo.pst_stime;
-  return true;
+  */
+  return false;
 }
 
 /*
@@ -321,8 +323,10 @@ Boolean Process::getUserModeTime(Uint64& i64) const
 {
   // time obtained in seconds from pstat needs to be
   // returned in milliseconds
+  /*
   i64 = 1000 * pInfo.pst_utime;
-  return true;
+  */
+  return false;
 }
 
 /*
@@ -523,8 +527,10 @@ NOTES             :
 */
 Boolean Process::getCPUTime(Uint32& i32) const
 {
+  /*
   i32= pInfo.pst_pctcpu;
-  return true;
+  */
+  return false;
 }
 
 /*
@@ -667,8 +673,10 @@ NOTES             :
 */
 Boolean Process::getCpuTimeDeadChildren(Uint64& i64) const
 {
+  /*
   i64 = pInfo.pst_cutime;
-  return true;
+  */
+  return false;
 }
 
 /*
@@ -683,8 +691,10 @@ NOTES             :
 */
 Boolean Process::getSystemTimeDeadChildren(Uint64& i64) const
 {
+  /*
   i64 = pInfo.pst_cstime;
-  return true;
+  */
+  return false;
 }
 
 /*
@@ -1112,6 +1122,7 @@ void parseProcStatus (char* inputFileString, peg_proc_t* P) {
 
 Boolean get_proc(peg_proc_t* P, int &pIndex , Boolean find_by_pid)
 {
+/*
   static struct dirent *dir;
   static struct stat stat_buff;
   static char path[32];
@@ -1214,6 +1225,8 @@ Boolean get_proc(peg_proc_t* P, int &pIndex , Boolean find_by_pid)
   pIndex = count;  // set pIndex to the next "reference"
   pthread_mutex_unlock( &proc_mutex );
   return true;
+*/
+  return false;
 }
 
 void doPercentCPU(char *inputFileString, peg_proc_t *P)
