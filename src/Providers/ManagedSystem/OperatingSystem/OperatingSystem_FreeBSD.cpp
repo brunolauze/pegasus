@@ -371,7 +371,7 @@ Boolean OperatingSystem::getSystemUpTime(Uint64& mUpTime)
         return true;
     }
 */
-    return false
+    return false;
 }
 
 Boolean OperatingSystem::getOperatingSystemCapability(String& scapability)
