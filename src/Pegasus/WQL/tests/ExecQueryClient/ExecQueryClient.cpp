@@ -33,13 +33,14 @@
 //
 //%/////////////////////////////////////////////////////////////////////////////
 
-
+#include <Pegasus/Common/MessageLoader.h>
 #include <Pegasus/Client/CIMClientRep.h>
 
 PEGASUS_USING_PEGASUS;
 PEGASUS_USING_STD;
+#define MAX_LEN 4096
 
-int main(int, char** argv)
+int main(int argc, char** argv)
 {
   CIMClientRep client;
 
@@ -47,26 +48,41 @@ int main(int, char** argv)
   {
     client.connectLocal();
     CIMNamespaceName NAMESPACE(argv[1]);
-    unsigned int matchedCount = 0;
+    
+    unsigned int i;
+    size_t len = 0;
+    char *_all_args, *all_args;
+
+    for(i=2; i<argc; i++) {
+        len += strlen(argv[i]);
+    }
+
+    _all_args = all_args = (char *)malloc(len+argc-1);
+
+    for(i=2; i<argc; i++) {
+        memcpy(_all_args, argv[i], strlen(argv[i]));
+        _all_args += strlen(argv[i])+1;
+        *(_all_args-1) = ' ';
+    }
+    *(_all_args-1) = 0;
 
     CIMResponseData response = client.execQuery(NAMESPACE,String("WQL"),
-                                      String(argv[3]));
+                                      String(all_args));
 
     
     Buffer buf;
-    reponse.encodeXmlResponse(buf);
-    printf(buf.data);
+    response.encodeXmlResponse(buf);
+    printf(buf.getData());
   }
   catch(Exception& e)
   {
+    printf("ERROR!");
     cout << argv[0] << ": "<< e.getMessage() << endl;
-    cout << argv[0] << " ----- " << testName << " testcase failed" << endl;
     client.disconnect();
     return 1;
   }
 
   client.disconnect();
-  cout << argv[0] << " +++++ passed all tests" << endl;
 
   return 0;
 }
