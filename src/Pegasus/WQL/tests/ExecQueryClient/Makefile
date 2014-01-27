@@ -26,18 +26,17 @@
 #// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #//
 #//////////////////////////////////////////////////////////////////////////
-ROOT=../../../..
-
+ROOT = ../../../../..
 include $(ROOT)/mak/config.mak
+include $(ROOT)/src/Pegasus/Client/tests/libraries.mak
 
-DIRS = \
-    Parser \
-    ParserCLI
+PROGRAM = cimquery
 
-ifdef PEGASUS_ENABLE_EXECQUERY
-    DIRS += \
-       ExecQuery \
-       ExecQueryClient
-endif
+SOURCES = ExecQueryClient.cpp
 
-include $(ROOT)/mak/recurse.mak
+include $(ROOT)/mak/program.mak
+
+tests:
+
+poststarttests:
+	$(PROGRAM)
