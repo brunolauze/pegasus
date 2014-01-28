@@ -64,6 +64,63 @@
 PEGASUS_USING_STD;
 PEGASUS_USING_PEGASUS;
 
+#define PST_MAX_CPUSTATES 15
+
+struct pst_processor {
+		uint64_t        psp_idx;        /* Index of the current spu in the array of processor statistic entries */
+        uint64_t        psp_fsreads;    /* # of reads from filesys blocks. */
+        uint64_t        psp_fswrites;   /* # of writes to filesys blocks. */
+        uint64_t        psp_nfsreads;   /* # of nfs disk blk reads issued. */
+        uint64_t        psp_nfswrites;  /* # of nfs disk blk writes issued. */
+        uint64_t        psp_bnfsread;   /* # of bytes read from NFS. */
+        uint64_t        psp_bnfswrite;  /* # of bytes written to NFS. */
+        uint64_t        psp_phread;     /* # of physical reads to raw devs. */
+        uint64_t        psp_phwrite;    /* # of physical writes to raw devs. */
+        uint64_t        psp_runocc;     /* # of times the processor had
+                                         * processes waiting to run.  This
+                                         * running total is updated once
+                                         * a second.
+                                         */
+        uint64_t        psp_runque;     /* # of processes the processor had
+                                         * waiting to run.  This running total
+                                         * is updated once a second.
+                                         */
+        uint64_t        psp_sysexec;    /* # of exec system calls. */
+        uint64_t        psp_sysread;    /* # of read system calls. */
+        uint64_t        psp_syswrite;   /* # of write system calls. */
+        uint64_t        psp_sysnami;    /* # of calls to sysnami(). */
+        uint64_t        psp_sysiget;    /* # of calls to sysiget(). */
+        uint64_t        psp_dirblk;     /* # of filesystem blocks read doing
+                                         * directory lookup.
+                                         */
+        uint64_t        psp_semacnt;    /* # of System V semaphore ops. */
+        uint64_t        psp_msgcnt;     /* # of System V message ops. */
+        uint64_t        psp_muxincnt;   /* # of MUX interrupts received. */
+        uint64_t        psp_muxoutcnt;  /* # of MUX interrupts sent. */
+        uint64_t        psp_ttyrawcnt;  /* # of raw characters read. */
+        uint64_t        psp_ttycanoncnt; /* # of canonical chars processed. */
+        uint64_t        psp_ttyoutcnt;  /* # of characters output. */
+        uint64_t        psp_iticksperclktick; /* interval timer counts (CR16)
+                                               * per clock tick,
+                                               * see sysconf(_SC_CLK_TCK)
+                                               */
+        uint64_t        psp_sysselect;  /* # of select system calls. */
+        double          psp_avg_1_min;  /* per-processor run queue lengths */
+        double          psp_avg_5_min;
+        double          psp_avg_15_min;
+                                        /* per-processor cpu time/state */
+        int64_t         psp_cpu_time[PST_MAX_CPUSTATES];
+
+
+        uint64_t        psp_logical_node; /* node the spu is on         */
+        int64_t         psp_pset_id;      /* processor set id to which this
+                                           * processor is assigned 
+                                           */
+        int64_t         psp_logical_id;   /* logical id of a processor */
+        int64_t         psp_processor_state; /* state of a processor */
+        int64_t         psp_flags;        /* processor flags */
+
+};
 
 /* ==========================================================================
    Type Definitions.
@@ -148,6 +205,7 @@ public:
 
 private:
   int index; // save index of this processor
+  struct pst_processor pInfo;
 };
 
 

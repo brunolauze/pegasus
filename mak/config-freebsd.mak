@@ -39,6 +39,7 @@ include $(ROOT)/mak/config-unix.mak
 
 PEGASUS_PLATFORM_FREEBSD_GENERIC_GNU = 1
 DEFINES += -DPEGASUS_PLATFORM_FREEBSD_GENERIC_GNU
+DEFINES += -DPEGASUS_OS_FREEBSD
 DEFINES += -DPEGASUS_PLATFORM_$(PEGASUS_PLATFORM)
 
 #########################################################################

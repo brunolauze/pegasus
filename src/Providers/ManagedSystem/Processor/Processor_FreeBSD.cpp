@@ -46,13 +46,18 @@
 
 #include "ProcessorPlatform.h"
 #include <sys/utsname.h>               // for uname()
+#include <sys/sysctl.h>               // for sysctl()
 #include <unistd.h>                    // for sysconf()
-#ifndef CPU_IA64_ARCHREV_0
-#define CPU_IA64_ARCHREV_0 0x300
-#endif
 
 PEGASUS_USING_STD;
 PEGASUS_USING_PEGASUS;
+
+#define CP_USER   0
+#define CP_NICE   1
+#define CP_SYS    2
+#define CP_INTR   3
+#define CP_IDLE   4
+#define CPUSTATES 5
 
 Processor::Processor()
 {
@@ -74,12 +79,11 @@ NOTES             :
 */
 Boolean Processor::getCaption(String& s) const
 {
-  char t[32];
-  t = "Core i7";
-/*
-  sprintf(t, "Processor %llu", Uint64(pInfo.psp_idx));
-*/
-  s = String(t);
+  char caption[32];
+   int name[2] = { CTL_HW, HW_MODEL };
+  size_t caption_ptr_size = sizeof(t);
+  sysctl(name, 2, &caption, &caption_ptr_size, NULL, 0);
+  s = String(caption);
   return true;
 }
 
@@ -432,6 +436,16 @@ Boolean Processor::getOtherFamilyDescription(String& s) const
     s = "Itanium(TM) Processor";
     return true;
   }
+  else if ( 0 == strncmp(u.machine,"x86_64",4) )
+  {
+    s = "Intel Core (TM) Processor";
+    return true;
+  }
+  else if ( 0 == strncmp(u.machine,"amd64",4) )
+  {
+    s = "Intel Core (TM) Processor";
+    return true;
+  }
   else return false;
 }
 
@@ -461,8 +475,8 @@ Boolean Processor::getUpgradeMethod(Uint16& i) const
 
 Boolean Processor::getMaxClockSpeed(Uint32& i) const
 {
-  // not yet implemented
-  return false;
+  sysctlbyname("hw.clockrate", &i, sizeof(i), NULL, 0);
+  return true;
 }
 
 // =============================================================================
@@ -476,8 +490,7 @@ Boolean Processor::getMaxClockSpeed(Uint32& i) const
 
 Boolean Processor::getCurrentClockSpeed(Uint32& i) const
 {
-  /* i = pInfo.psp_iticksperclktick * sysconf(_SC_CLK_TCK) / 1000000; */
-  i = 26;
+  sysctlbyname("hw.clockrate", &i, sizeof(i), NULL, 0);
   return true;
 }
 
@@ -525,8 +538,30 @@ Boolean Processor::getAddressWidth(Uint16& i) const
 
 Boolean Processor::getLoadPercentage(Uint16& i) const
 {
-  i = 100. * pInfo.psp_avg_1_min;
-  return true;
+        long cur[CPUSTATES];
+        size_t cur_sz = sizeof cur;
+        int state = 0;
+        long sum = 0;
+        double util = 0;
+
+        memset(last, 0, sizeof last);
+  		if (sysctlbyname("kern.cp_time", &cur, &cur_sz, NULL, 0) < 0)
+        {
+                return false;
+        }
+
+        for (state = 0; state<CPUSTATES; state++)
+        {
+                long tmp = cur[state];
+                cur[state] -= last[state];
+                last[state] = tmp;
+                sum += cur[state];
+        }
+
+        util = 100.0L - (100.0L * cur[CP_IDLE] / (sum ? (double) sum : 1.0L));
+       	i = util;
+
+        return true;
 }
 
 // =============================================================================
@@ -604,9 +639,8 @@ Boolean Processor::getBiosID(String& s) const
 
 Boolean Processor::getFirmwareID(String& s) const
 {
-  long cpu = sysconf(_SC_CPU_VERSION);
-
   /* 
+  long cpu = sysconf(_SC_CPU_VERSION);
   if (cpu == CPU_PA_RISC1_0) s = "HP PA_RISC1.0";
   else if (cpu == CPU_PA_RISC1_1) s = "HP PA_RISC1.1";
   else if (cpu == CPU_PA_RISC1_2) s = "HP PA_RISC1.2";
@@ -677,13 +711,15 @@ Boolean Processor::loadProcessorInfo(int &pIndex)
   // the number of elements (0 if last arg is pid instead of index),
   // and an index to start at
 
-  int stat = pstat_getprocessor(&pInfo, sizeof(pInfo), 1, pIndex);
+  // implement pstat_getprocessor internally
+  //int stat = pstat_getprocessor(&pInfo, sizeof(pInfo), 1, pIndex);
 
   // pstat_getprocessor returns number of returned structures
   // if this was not 1, it means that we are at the end
   // of the process entry table, and the caller should not
   // use data from this call
-  if (stat != 1) return false;
+  //if (stat != 1) return false;
+
   pIndex = pInfo.psp_idx;
   return true;
 }
@@ -701,6 +737,8 @@ NOTES             :
 */
 Boolean Processor::findProcessor(const String& deviceID)
 {
+  return true;
+  /*
   int pIndex;
   int stat;
 
@@ -712,11 +750,10 @@ Boolean Processor::findProcessor(const String& deviceID)
   // if this loop finishes, we haven't found the process
   for (pIndex=0, stat=1; stat!=0; pIndex++)
   {
-    // pstat_getprocessor() fills in ps with a process entry's
-    // data, and returns the number of entries filled in,
-    // so that anything other than 1 is a problem
-    stat = pstat_getprocessor(&pInfo, sizeof(pInfo), 1, pIndex);
-
+    
+    // implement pstat_getprocessor internally
+    //stat = pstat_getprocessor(&pInfo, sizeof(pInfo), 1, pIndex);
+    stat = 1;
     // we can return right now if we found it
     if (idx == pInfo.psp_idx) return true;
     pIndex = pInfo.psp_idx;
@@ -725,4 +762,5 @@ Boolean Processor::findProcessor(const String& deviceID)
   // we finished the loop without finding the process
   // signal this to the caller
   return false;
+  */
 }
