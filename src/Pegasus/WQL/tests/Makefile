@@ -36,8 +36,7 @@ DIRS = \
 
 ifdef PEGASUS_ENABLE_EXECQUERY
     DIRS += \
-       ExecQuery \
-       ExecQueryClient
+       ExecQuery
 endif
 
 include $(ROOT)/mak/recurse.mak

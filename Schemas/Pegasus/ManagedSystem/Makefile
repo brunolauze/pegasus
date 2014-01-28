@@ -63,6 +63,12 @@ ifeq ($(OS), linux)
   endif
 endif
 
+ifeq ($(OS), freebsd)
+  ifndef PEGASUS_DISABLE_PROV_USERCTXT
+    SET_USER_CONTEXT_TO_REQUESTOR = true
+  endif
+endif
+
 ifeq ($(MANAGEDSYSTEM_NS_SUPPORTED),true)
 repository:
 	@ $(ECHO) +++++ Loading CIM_Schema$(CIM_SCHEMA_VER) into $(MANAGEDSYSTEMNS) namespace ...
