@@ -54,7 +54,7 @@
 #define PEGASUS_PLATFORM_FREEBSD_GENERIC_GNU
 #endif
 
-#ifndef
+#ifndef PEGASUS_OS_FREEBSD
 #define PEGASUS_OS_FREEBSD
 #endif
 
