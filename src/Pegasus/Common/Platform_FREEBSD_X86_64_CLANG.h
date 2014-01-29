@@ -54,7 +54,9 @@
 #define PEGASUS_PLATFORM_FREEBSD_GENERIC_GNU
 #endif
 
+#ifndef
 #define PEGASUS_OS_FREEBSD
+#endif
 
 #define PEGASUS_POINTER_64BIT
 

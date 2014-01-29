@@ -81,7 +81,7 @@ Boolean Processor::getCaption(String& s) const
 {
   char caption[32];
    int name[2] = { CTL_HW, HW_MODEL };
-  size_t caption_ptr_size = sizeof(t);
+  size_t caption_ptr_size = sizeof(caption);
   sysctl(name, 2, &caption, &caption_ptr_size, NULL, 0);
   s = String(caption);
   return true;
@@ -475,8 +475,15 @@ Boolean Processor::getUpgradeMethod(Uint16& i) const
 
 Boolean Processor::getMaxClockSpeed(Uint32& i) const
 {
-  sysctlbyname("hw.clockrate", &i, sizeof(i), NULL, 0);
+ /* TODO: Review this */
+/*
+  int cpu_hz;
+  size_t cpu_hz_site_t = sizeof(cpu_hz);
+  sysctlbyname("hw.clockrate", &cpu_hz, &cpu_hz_site_t, NULL, 0);
+  i = cpu_hz;
   return true;
+*/
+  return false;
 }
 
 // =============================================================================
@@ -490,8 +497,15 @@ Boolean Processor::getMaxClockSpeed(Uint32& i) const
 
 Boolean Processor::getCurrentClockSpeed(Uint32& i) const
 {
-  sysctlbyname("hw.clockrate", &i, sizeof(i), NULL, 0);
+ /* TODO: Review this
+/*
+  int cpu_hz;
+  size_t cpu_hz_site_t = sizeof(cpu_hz);
+  sysctlbyname("hw.clockrate", &cpu_hz, &cpu_hz_site_t, NULL, 0);
+  i = cpu_hz;
   return true;
+*/
+  return false;
 }
 
 // =============================================================================
@@ -505,10 +519,7 @@ Boolean Processor::getCurrentClockSpeed(Uint32& i) const
 
 Boolean Processor::getDataWidth(Uint16& i) const
 {
-  long bits = sysconf(_SC_HW_32_64_CAPABLE);
-  if (_SYSTEM_SUPPORTS_LP64OS(bits)) i = 64;
-  else if (_SYSTEM_SUPPORTS_ILP32OS(bits)) i = 32;
-  else i = 0;
+  i = 0;
   return true;
 }
 
@@ -538,7 +549,9 @@ Boolean Processor::getAddressWidth(Uint16& i) const
 
 Boolean Processor::getLoadPercentage(Uint16& i) const
 {
-        long cur[CPUSTATES];
+/* TODO: Review this */
+/*
+        long cur[CPUSTATES], last[CPUSTATES];
         size_t cur_sz = sizeof cur;
         int state = 0;
         long sum = 0;
@@ -562,6 +575,8 @@ Boolean Processor::getLoadPercentage(Uint16& i) const
        	i = util;
 
         return true;
+*/
+   return false;
 }
 
 // =============================================================================
@@ -720,7 +735,7 @@ Boolean Processor::loadProcessorInfo(int &pIndex)
   // use data from this call
   //if (stat != 1) return false;
 
-  pIndex = pInfo.psp_idx;
+  pIndex = 0;
   return true;
 }
 
