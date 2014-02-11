@@ -55,7 +55,7 @@ instance of PG_ProviderCapabilities
   CapabilityID = "1";
   ClassName = "CIM_Process";
   Namespaces = { "root/cimv2" };
-  ProviderType = { 2, 5 }; // Instance and Methods
+  ProviderType = { 2, 5, 7 }; // Instance and Methods
   SupportedProperties = NULL; // All properties
   SupportedMethods = NULL; // All methods
 };
@@ -67,7 +67,7 @@ instance of PG_ProviderCapabilities
   CapabilityID = "2";
   ClassName = "UNIX_Process";
   Namespaces = { "root/cimv2" };
-  ProviderType = { 2, 5 }; // Instance and Methods
+  ProviderType = { 2, 5, 7 }; // Instance and Methods
   SupportedProperties = NULL; // All properties
   SupportedMethods = NULL; // All methods
 };
@@ -87,7 +87,7 @@ instance of PG_ProviderCapabilities
   CapabilityID = "1";
   ClassName = "UNIX_ProcessStatisticalInformation";
   Namespaces = { "root/cimv2" };
-  ProviderType = { 2, 5 }; // Instance and Methods
+  ProviderType = { 2, 5, 7 }; // Instance and Methods
   SupportedProperties = NULL; // All properties
   SupportedMethods = NULL; // All methods
 };

@@ -34,7 +34,7 @@ instance of PG_ProviderModule
    Version = "2.0.0";
    InterfaceType = "C++Default";
    InterfaceVersion = "2.1.0";
-   Location = "OSProvider";
+   Location = "UNIX_OperatingSystemProvider";
 };
 
 instance of PG_Provider 
@@ -52,7 +52,7 @@ instance of PG_ProviderCapabilities
    Namespaces = {"root/cimv2"};
 // do instances, but won't do enum for this superclass,
 // the CIMOM will invoke us for that, we just do Get
-   ProviderType = { 2, 5 }; // Instance and Method
+   ProviderType = { 2, 5, 7 }; // Instance and Method
    SupportedProperties = NULL; // All properties
    SupportedMethods = NULL; // All methods
 };
@@ -64,7 +64,7 @@ instance of PG_ProviderCapabilities
    CapabilityID = "2";
    ClassName = "UNIX_OperatingSystem";
    Namespaces = {"root/cimv2"};
-   ProviderType = { 2, 5 }; // Instance and Method
+   ProviderType = { 2, 5, 7 }; // Instance and Method
    SupportedProperties = NULL; // All properties
    SupportedMethods = NULL; // All methods
 };

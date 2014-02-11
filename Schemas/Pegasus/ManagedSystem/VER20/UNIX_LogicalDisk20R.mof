@@ -30,6 +30,17 @@
 
 // Provider for PG_LogicalDisk
 
+
+instance of PG_ProviderModule 
+{
+   Name = "UNIX_LogicalDiskModule";
+   Vendor = "OpenPegasus";
+   Version = "2.0.0";
+   InterfaceType = "C++Default";
+   InterfaceVersion = "2.1.0";
+   Location = "UNIX_LogicalDiskProvider";
+};
+
 instance of PG_Provider 
 {
   ProviderModuleName = "UNIX_LogicalDiskModule";
@@ -44,7 +55,7 @@ instance of PG_ProviderCapabilities
   CapabilityID = "1";
   ClassName = "CIM_LogicalDisk";
   Namespaces = { "root/cimv2" };
-  ProviderType = { 2 }; // Instance
+  ProviderType = { 2, 5, 7 }; // Instance
   SupportedProperties = NULL; // All properties
   SupportedMethods = NULL; // All methods
 };
@@ -56,7 +67,7 @@ instance of PG_ProviderCapabilities
   CapabilityID = "2";
   ClassName = "UNIX_LogicalDisk";
   Namespaces = { "root/cimv2" };
-  ProviderType = { 2 }; // Instance
+  ProviderType = { 2, 5, 7 }; // Instance
   SupportedProperties = NULL; // All properties
   SupportedMethods = NULL; // All methods
 };

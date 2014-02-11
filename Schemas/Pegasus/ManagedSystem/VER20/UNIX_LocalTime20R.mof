@@ -30,6 +30,17 @@
 
 // Provider for UNIX_LocalTime
 
+
+instance of PG_ProviderModule 
+{
+   Name = "UNIX_LocalTimeModule";
+   Vendor = "OpenPegasus";
+   Version = "2.0.0";
+   InterfaceType = "C++Default";
+   InterfaceVersion = "2.1.0";
+   Location = "UNIX_LocalTimeProvider";
+};
+
 instance of PG_Provider 
 {
   ProviderModuleName = "UNIX_LocalTimeModule";
@@ -43,7 +54,7 @@ instance of PG_ProviderCapabilities
   CapabilityID = "1";
   ClassName = "CIM_LocalTime";
   Namespaces = { "root/cimv2" };
-  ProviderType = { 2 }; // Instance
+  ProviderType = { 2, 5, 7 }; // Instance
   SupportedProperties = NULL; // All properties
   SupportedMethods = NULL; // All methods
 };
@@ -55,7 +66,7 @@ instance of PG_ProviderCapabilities
   CapabilityID = "2";
   ClassName = "UNIX_LocalTime";
   Namespaces = { "root/cimv2" };
-  ProviderType = { 2 }; // Instance
+  ProviderType = { 2, 5, 7 }; // Instance
   SupportedProperties = NULL; // All properties
   SupportedMethods = NULL; // All methods
 };

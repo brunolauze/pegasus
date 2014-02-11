@@ -61,7 +61,7 @@ instance of PG_ProviderCapabilities
    CapabilityID = "2";
    ClassName = "CIM_UnitaryComputerSystem";
    Namespaces = {"root/cimv2"};
-   ProviderType = { 2 }; // Instance
+   ProviderType = { 2, 7 }; // Instance
    SupportedProperties = NULL; // All properties
    SupportedMethods = NULL; // All methods
 };
@@ -73,7 +73,7 @@ instance of PG_ProviderCapabilities
    CapabilityID = "3";
    ClassName = "UNIX_ComputerSystem";
    Namespaces = {"root/cimv2"};
-   ProviderType = { 2 }; // Instance
+   ProviderType = { 2, 7 }; // Instance
    SupportedProperties = NULL; // All properties
    SupportedMethods = NULL; // All methods
 };

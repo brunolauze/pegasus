@@ -44,7 +44,7 @@ instance of PG_ProviderCapabilities
   CapabilityID = "1";
   ClassName = "CIM_IPRoute";
   Namespaces = { "root/cimv2" };
-  ProviderType = { 2 }; // Instance
+  ProviderType = { 2, 5, 7 }; // Instance
   SupportedProperties = NULL; // All properties
   SupportedMethods = NULL; // All methods
 };
@@ -56,7 +56,7 @@ instance of PG_ProviderCapabilities
   CapabilityID = "2";
   ClassName = "UNIX_IPRoute";
   Namespaces = { "root/cimv2" };
-  ProviderType = { 2 }; // Instance
+  ProviderType = { 2, 5, 7 }; // Instance
   SupportedProperties = NULL; // All properties
   SupportedMethods = NULL; // All methods
 };
