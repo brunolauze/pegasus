@@ -71,7 +71,7 @@ Boolean UNIX_DNSService::getInstanceID(CIMProperty &p) const
 
 Boolean UNIX_DNSService::getStartMode(CIMProperty &p) const
 {
-    p = CIMProperty(PROPERTY_STARTED, String("Automatic"));
+    p = CIMProperty(PROPERTY_START_MODE, String("Automatic"));
     return true;
 }
 

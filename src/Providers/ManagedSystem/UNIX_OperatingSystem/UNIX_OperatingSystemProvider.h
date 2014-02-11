@@ -32,12 +32,13 @@
 #define _OPERATINGSYSTEMPROVIDER_H
 
 #include <Pegasus/Common/Config.h>
-#include <Pegasus/Provider/CIMInstanceProvider.h>
+#include <Pegasus/Common/MessageLoader.h>
+#include <Pegasus/Provider/CIMInstanceQueryProvider.h>
 #include <Pegasus/Provider/CIMMethodProvider.h>
 #include "UNIX_OperatingSystem.h"
 
 class UNIX_OperatingSystemProvider :
-    public CIMInstanceProvider,
+	public CIMInstanceQueryProvider,
     public CIMMethodProvider
 {
 public:
@@ -108,7 +109,13 @@ public:
         const Array<CIMParamValue>& inParameters,
         MethodResultResponseHandler& handler);
 
-CIMInstance testConstructInstance(
+    void execQuery(
+       const OperationContext& context,
+       const CIMObjectPath& objectPath,
+       const QueryExpression& query,
+       InstanceResponseHandler& handler);
+
+	CIMInstance testConstructInstance(
 		    const CIMName &className,
 		    const CIMNamespaceName &nameSpace,
 		    const UNIX_OperatingSystem &_p);

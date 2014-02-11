@@ -236,6 +236,71 @@ void UNIX_ComputerSystemProvider::deleteInstance(
     throw CIMNotSupportedException(String::EMPTY);
 }
 
+void UNIX_ComputerSystemProvider::execQuery(
+       const OperationContext& context,
+       const CIMObjectPath& objectPath,
+       const QueryExpression& query,
+       InstanceResponseHandler& handler)
+{
+	CIMName className;
+    CIMInstance instance;
+    CIMObjectPath newref;
+
+    className = objectPath.getClassName();
+
+    // only return instances when enumerate on our subclass, CIMOM
+    // will call us as natural part of recursing through subtree on
+    // enumerate - if we return instances on enumerate of our superclass,
+    // there would be dups
+    if (className.equal(CLASS_EXTENDED_COMPUTER_SYSTEM)
+    	|| className.equal (CLASS_CIM_COMPUTER_SYSTEM))
+    {
+    	UNIX_ComputerSystem _cs;
+        handler.processing();
+
+        Array<CIMKeyBinding> keys;
+        keys.append(CIMKeyBinding(
+            PROPERTY_CREATION_CLASS_NAME,
+            CLASS_EXTENDED_COMPUTER_SYSTEM,
+            CIMKeyBinding::STRING));
+        keys.append(CIMKeyBinding(
+            PROPERTY_NAME,
+            _cs.getHostName(),
+            CIMKeyBinding::STRING));
+        CIMObjectPath instanceName(
+            String::EMPTY,       // Hostname not required
+            CIMNamespaceName(),  // Namespace not required
+            CLASS_EXTENDED_COMPUTER_SYSTEM,
+            keys);
+
+	    instance = _cs.buildInstance(CLASS_EXTENDED_COMPUTER_SYSTEM);
+        if (query.evaluate(instance))
+	    {
+	        instance.setPath(instanceName);
+	        handler.deliver(instance);
+	    }
+        handler.complete();
+    }
+    else
+    {
+        throw CIMNotSupportedException("UNIX_OperatingSystemProvider "
+                "does not support class " + className.getString());
+    }
+    return;
+}
+
+void UNIX_ComputerSystemProvider::invokeMethod(
+    const OperationContext& context,
+    const CIMObjectPath& objectReference,
+    const CIMName& methodName,
+    const Array<CIMParamValue>& inParameters,
+    MethodResultResponseHandler& handler)
+{
+    throw CIMNotSupportedException(
+        "UNIX_ComputerSystemProvider does not support invokeMethod");
+}
+
+
 void UNIX_ComputerSystemProvider::initialize(CIMOMHandle& handle)
 {
     _ch = handle;

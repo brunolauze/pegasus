@@ -442,6 +442,21 @@ Boolean UNIX_Account::load(int &pIndex)
 	return false;
 }
 
+#define __initialize_H
+Boolean UNIX_Account::initialize()
+{
+	endpwent();
+	return true;
+}
+
+
+#define __finalize_H
+Boolean UNIX_Account::finalize()
+{
+	endpwent();
+	return true;
+}
+
 Boolean UNIX_Account::validateKey(CIMKeyBinding &kb) const
 {
 	/* Keys  */

@@ -495,6 +495,45 @@ CIMObjectPath UNIX_OperatingSystemProvider::_fill_reference(
     return CIMObjectPath(csName, nameSpace, className, keys);
 }
 
+void UNIX_OperatingSystemProvider::execQuery(
+       const OperationContext& context,
+       const CIMObjectPath& objectPath,
+       const QueryExpression& query,
+       InstanceResponseHandler& handler)
+{
+	CIMName className;
+    CIMInstance instance;
+    CIMObjectPath newref;
+
+    className = objectPath.getClassName();
+
+    // only return instances when enumerate on our subclass, CIMOM
+    // will call us as natural part of recursing through subtree on
+    // enumerate - if we return instances on enumerate of our superclass,
+    // there would be dups
+    if (className.equal (EXTENDEDOPERATINGSYSTEMCLASS) ||
+    	className.equal(STANDARDOPERATINGSYSTEMCLASS))
+    {
+    	UNIX_OperatingSystem os;
+        handler.processing();
+        newref = _fill_reference(objectPath.getNameSpace(), className, os);
+	    instance = _build_instance(objectPath, os);
+        if (query.evaluate(instance))
+	    {
+	        instance.setPath(newref);
+	        handler.deliver(instance);
+	    }
+        handler.complete();
+    }
+    else
+    {
+        throw CIMNotSupportedException("UNIX_OperatingSystemProvider "
+                "does not support class " + className.getString());
+    }
+    return;
+}
+
+
 void UNIX_OperatingSystemProvider::invokeMethod(
     const OperationContext& context,
     const CIMObjectPath& objectReference,

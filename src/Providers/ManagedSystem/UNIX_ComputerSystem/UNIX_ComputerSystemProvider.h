@@ -36,7 +36,9 @@
 
 #include "UNIX_ComputerSystem.h"
 
-#include <Pegasus/Provider/CIMInstanceProvider.h>
+#include <Pegasus/Common/MessageLoader.h>
+#include <Pegasus/Provider/CIMInstanceQueryProvider.h>
+#include <Pegasus/Provider/CIMMethodProvider.h>
 
 // Class Names
 
@@ -101,7 +103,9 @@
 PEGASUS_USING_STD;
 PEGASUS_USING_PEGASUS;
 
-class UNIX_ComputerSystemProvider: public CIMInstanceProvider
+class UNIX_ComputerSystemProvider: 
+	public CIMInstanceQueryProvider,
+	public CIMMethodProvider
 {
 public:
     UNIX_ComputerSystemProvider();
@@ -151,6 +155,21 @@ public:
 
     void initialize(CIMOMHandle& handle);
     void terminate();
+
+
+    void invokeMethod(
+        const OperationContext& context,
+        const CIMObjectPath& objectReference,
+        const CIMName& methodName,
+        const Array<CIMParamValue>& inParameters,
+        MethodResultResponseHandler& handler);
+
+    void execQuery(
+       const OperationContext& context,
+       const CIMObjectPath& objectPath,
+       const QueryExpression& query,
+       InstanceResponseHandler& handler);
+
 
 protected:
 
