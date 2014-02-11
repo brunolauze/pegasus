@@ -51,9 +51,7 @@ EXTRA_INCLUDES = \
 SOURCES = \
 	UNIX_NTPServiceProvider.cpp \
 	UNIX_NTPServiceMain.cpp \
-    UNIX_NTPService.cpp \
-   	smartdisk_client.cpp \
-   	zfs_client.cpp
+	UNIX_NTPService.cpp
 
 LIBRARIES = \
     pegprovider \
