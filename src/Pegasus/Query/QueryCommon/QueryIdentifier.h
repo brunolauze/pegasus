@@ -38,7 +38,6 @@
 #include <Pegasus/Common/ArrayInternal.h>
 #include <Pegasus/Common/CIMName.h>
 #include <Pegasus/Query/QueryCommon/SubRange.h>
-#include <Pegasus/Query/QueryCommon/QueryException.h>
 
 #ifdef PEGASUS_USE_EXPERIMENTAL_INTERFACES
 

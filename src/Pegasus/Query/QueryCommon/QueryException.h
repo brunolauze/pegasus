@@ -51,7 +51,6 @@ public:
         : Exception(MessageLoaderParms(KEY, MSG, msg))
     {
     }
-
     QueryException(const ContentLanguageList& langs, const String& msg)
         : Exception(msg)
     {
@@ -96,6 +95,7 @@ class PEGASUS_QUERYCOMMON_LINKAGE QueryValidationException :
 public:
     static const char MSG[];
     static const char KEY[];
+
 
     QueryValidationException(const String& msg)
         : QueryException(MessageLoaderParms(KEY, MSG, msg))
