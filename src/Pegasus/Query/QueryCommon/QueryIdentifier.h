@@ -39,7 +39,7 @@
 #include <Pegasus/Common/CIMName.h>
 #include <Pegasus/Query/QueryCommon/SubRange.h>
 #ifdef PEGASUS_INTERNALONLY
-#include <Pegaus/Query/QueryCommon/QueryException.h>
+#include <Pegasus/Query/QueryCommon/QueryException.h>
 #endif
 
 #ifdef PEGASUS_USE_EXPERIMENTAL_INTERFACES
