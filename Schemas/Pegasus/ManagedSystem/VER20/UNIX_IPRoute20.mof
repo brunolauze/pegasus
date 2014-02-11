@@ -1,0 +1,323 @@
+//%LICENSE////////////////////////////////////////////////////////////////
+//
+// Licensed to The Open Group (TOG) under one or more contributor license
+// agreements.  Refer to the OpenPegasusNOTICE.txt file distributed with
+// this work for additional information regarding copyright ownership.
+// Each contributor licenses this file to you under the OpenPegasus Open
+// Source License; you may not use this file except in compliance with the
+// License.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the "Software"),
+// to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense,
+// and/or sell copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+// CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+//////////////////////////////////////////////////////////////////////////
+// =============================================================================
+// Title:              UNIX_IPRoute  MOF  
+// Filename:           UNIX_IPRoute20.mof
+// Date:               02/03/2014
+// Description:        This file specifies the UNIX_IPRoute class
+//
+// This class definitions contained in this file are:
+//   CIM_ManagedElement
+//   CIM_ManagedSystemElement
+//   CIM_LogicalElement
+//   CIM_NextHopRouting 
+//   CIM_IPRoute
+// =============================================================================
+
+// =============================================================================
+// Copyright 1998-2003 Distributed Management Task Force, Inc. (DMTF).
+// All rights reserved.
+// DMTF is a not-for-profit association of industry members dedicated
+// to promoting enterprise and systems management and interoperability.
+// DMTF specifications and documents may be reproduced for uses
+// consistent with this purpose by members and non-members,
+// provided that correct attribution is given.
+// As DMTF specifications may be revised from time to time,
+// the particular version and release date should always be noted.
+// ===================================================================
+
+// ==================================================================
+// ManagedElement
+// ================================================================== 
+   [Abstract, Description (
+     "ManagedElement is an abstract class that provides a common "  
+     "superclass (or top of the inheritance tree) for the "
+     "non-association classes in the CIM Schema.")]
+class CIM_ManagedElement {  
+      [MaxLen (64), Description (  
+        "The Caption property is a short textual description (one-"    
+        "line string) of the object.") ]   
+   string Caption;  
+      [Description (  
+        "The Description property provides a textual description of "
+        "the object.") ]   
+   string Description;    
+};
+     
+
+// ================================================================== 
+//    ManagedSystemElement
+// ==================================================================
+   [Abstract, Description (
+     "CIM_ManagedSystemElement is the base class for the System "
+     "Element hierarchy. Membership Criteria: Any distinguishable "
+     "component of a System is a candidate for inclusion in this "
+     "class. Examples: software components, such as files; and "
+     "devices, such as disk drives and controllers, and physical "
+     "components such as chips and cards.") ] 
+class CIM_ManagedSystemElement : CIM_ManagedElement {
+      [Description (
+        "A datetime value indicating when the object was installed. "
+        "A lack of a value does not indicate that the object is not "
+        "installed."), 
+       MappingStrings {"MIF.DMTF|ComponentID|001.5"} ] 
+   datetime InstallDate;
+      [MaxLen (256), Description (
+        "The Name property defines the label by which the object is "
+        "known. When subclassed, the Name property can be overridden "
+        "to be a Key property.") ] 
+   string Name;
+      [MaxLen (10), Description ( 
+        "  A string indicating the current status of the object. " 
+        "Various operational and non-operational statuses are " 
+        "defined. Operational statuses are \"OK\", \"Degraded\", " 
+        "\"Stressed\" and \"Pred Fail\". \"Stressed\" indicates that " 
+        "the Element is functioning, but needs attention. Examples " 
+        "of \"Stressed\" states are overload, overheated, etc. The " 
+        "condition \"Pred Fail\" (failure predicted) indicates that " 
+        "an Element is functioning properly but predicting a failure " 
+        "in the near future. An example is a SMART-enabled hard " 
+        "drive. \n" 
+        "  Non-operational statuses can also be specified. These " 
+        "are \"Error\", \"NonRecover\", \"Starting\", \"Stopping\", " 
+        " \"Stopped\", " 
+        "\"Service\", \"No Contact\" and \"Lost Comm\". \"NonRecover\" " 
+        "indicates that a non-recoverable error has occurred. " 
+        "\"Service\" describes an Element being configured, maintained, " 
+        "cleaned, or otherwise administered. This status could apply " 
+        "during mirror-resilvering of a disk, reload of a user " 
+        "permissions list, or other administrative task. Not all such " 
+        "work is on-line, yet the Element is neither \"OK\" nor in " 
+        "one of the other states. \"No Contact\" indicates that the " 
+        "current instance of the monitoring system has knowledge of " 
+        "this Element but has never been able to establish " 
+        "communications with it. \"Lost Comm\" indicates that " 
+        "the ManagedSystemElement is known to exist and has been " 
+        "contacted successfully in the past, but is currently unreachable." 
+        "\"Stopped\" indicates that the ManagedSystemElement is known " 
+        "to exist, it is not operational (i.e. it is unable to " 
+        "provide service to users), but it has not failed. It has purposely " 
+        "been made non-operational. The Element " 
+        "may have never been \"OK\", the Element may have initiated its " 
+        "own stop, or a management system may have initiated the stop."), 
+       ValueMap {"OK", "Error", "Degraded", "Unknown", "Pred Fail", 
+                 "Starting", "Stopping", "Service", "Stressed", 
+                 "NonRecover", "No Contact", "Lost Comm", "Stopped"} ] 
+   string Status; 
+};
+
+
+// ==================================================================
+//    LogicalElement
+// ==================================================================
+   [Abstract, Description (
+     "CIM_LogicalElement is a base class for all the components of "
+     "a System that represent abstract system components, such "
+     "as Files, Processes, or system capabilities in the form "
+     "of Logical Devices.") ] 
+class CIM_LogicalElement : CIM_ManagedSystemElement {
+};
+
+// Copyright (c) 2005 DMTF.  All rights reserved.
+   [Deprecated { "CIM_NextHopRoute" }, 
+    Abstract, Version ( "2.7.0" ), 
+    UMLPackagePath ( "CIM::Network::Routes" ), 
+    Description ( 
+       "NextHopRouting relates a destination address to the address or "
+       "interface through which the remote address may be reached. An "
+       "instance of this class can represent either static or dynamic "
+       "routing, and may represent a routing table entry (but it is "
+       "not required that all NextHopRoutes be in a routing table). "
+       "Static routes are distinguished by setting the IsStatic "
+       "boolean property to TRUE. Subclasses of NextHopRouting provide "
+       "specific protocol and Key information. NextHopRoutes are "
+       "dependent on at least one ForwardingService to execute them. "
+       "This is conveyed by the CIM_NextHopForwardedByService "
+       "association. \n"
+       "\n"
+       "NextHopRouting is deprecated in lieu of the more general, "
+       "concrete NextHopRoute class. NextHopRoute allows the "
+       "definition of BOTH a next hop address and an interface for "
+       "transmission of the traffic. Also, it does not mandate the "
+       "instantiation of a ForwardingService class. The latter is not "
+       "needed if the sole purpose of the instance is to specify a "
+       "\'desired/configured\' route. This is simply a specification "
+       "of the next hop." )]
+class CIM_NextHopRouting : CIM_LogicalElement {
+
+      [Deprecated { "CIM_NextHopRoute.DestinationAddress" }, 
+       Description ( 
+          "The address which serves as the destination to be reached."
+           )]
+   string DestinationAddress;
+
+      [Deprecated { "No value" }, 
+       Description ( "The mask for the DestinationAddress." )]
+   string DestinationMask;
+
+      [Deprecated { "CIM_AssociatedNextHop.Antecedent", 
+          "CIM_RouteUsesEndpoint.Antecedent" }, 
+       Description ( 
+          "This contains either the address of the next-hop router, "
+          "or the interface used to reach the destination." )]
+   string NextHop;
+
+      [Deprecated { "CIM_NextHopRoute.IsStatic" }, 
+       Description ( 
+          "TRUE indicates that this is a static route, and FALSE "
+          "indicates a dynamically-learned route." )]
+   boolean IsStatic;
+
+
+};
+
+
+// Copyright (c) 2005 DMTF.  All rights reserved.
+   [Deprecated { "CIM_NextHopIPRoute" }, 
+    Abstract, Version ( "2.7.0" ), 
+    UMLPackagePath ( "CIM::Network::Routes" ), 
+    Description ( 
+       "An IPRoute relates a destination address to the address or "
+       "interface through which the remote address may be reached. The "
+       "destination address may be a specific IP endpoint or a subnet, "
+       "dependent on the mask. An instance of this class represents "
+       "either static or dynamic routing. Static routes are "
+       "distinguished by setting the IsStatic boolean property to "
+       "TRUE. \n"
+       "\n"
+       "Since many routes between endpoints can be defined (using "
+       "different route calculation algorithms), the CIM_IPRoute class "
+       "is defined as Abstract. This forces subclassing (for example, "
+       "see CIM_BGPIPRoute) and allows the instances of its subclasses "
+       "to be distinguished based on their CreationClassName key "
+       "property. \n"
+       "\n"
+       "IPRoute is deprecated in lieu of the more general, concrete "
+       "NextHopIPRoute class. NextHopIPRoute allows the definition of "
+       "BOTH a next hop address and an interface for transmission of "
+       "the traffic. Also, it does not mandate the instantiation of a "
+       "ForwardingService class." )]
+class CIM_IPRoute : CIM_NextHopRouting {
+
+      [Deprecated { "No value" }, 
+       Key, Description ( 
+          "The scoping ForwardingService\'s SystemCreationClassName." ), 
+       MaxLen ( 256 ), 
+       Propagated ( "CIM_ForwardingService.SystemCreationClassName" )]
+   string SystemCreationClassName;
+
+      [Deprecated { "No value" }, 
+       Key, Description ( 
+          "The scoping ForwardingService\'s SystemName." ), 
+       MaxLen ( 256 ), 
+       Propagated ( "CIM_ForwardingService.SystemName" )]
+   string SystemName;
+
+      [Deprecated { "No value" }, 
+       Key, Description ( 
+          "The scoping ForwardingService\'s CreationClassName." ), 
+       MaxLen ( 256 ), 
+       Propagated ( "CIM_ForwardingService.CreationClassName" )]
+   string ServiceCreationClassName;
+
+      [Deprecated { "No value" }, 
+       Key, Description ( "The scoping ForwardingService\'s Name." ), 
+       MaxLen ( 256 ), 
+       Propagated ( "CIM_ForwardingService.Name" )]
+   string ServiceName;
+
+      [Deprecated { "No value" }, 
+       Key, Description ( 
+          "CreationClassName indicates the name of the class or the "
+          "subclass used in the creation of an instance. When used "
+          "with the other key properties of this class, this "
+          "property allows all instances of this class and its "
+          "subclasses to be uniquely identified." ), 
+       MaxLen ( 256 )]
+   string CreationClassName;
+
+      [Deprecated { "CIM_NextHopIPRoute.DestinationAddress" }, 
+       Key, Description ( 
+          "The IP address which serves as the destination of the "
+          "traffic, formatted according to the appropriate "
+          "convention as defined in the AddressType property of "
+          "this class. \n"
+          "\n"
+          "This property has the same semantics as "
+          "DestinationAddress inherited from the NextHopRouting "
+          "superclass, but a different property name. This is "
+          "because this property and class were defined before "
+          "NextHopRouting and are Key properties. They cannot be "
+          "removed. ModelCorrespondence indicates that they should "
+          "be set to equivalent values for consistency and ease of "
+          "query." ), 
+       ModelCorrespondence { "CIM_IPRoute.DestinationAddress" }]
+   string IPDestinationAddress;
+
+      [Deprecated { "CIM_NextHopIPRoute.DestinationMask" }, 
+       Key, Description ( 
+          "The mask for the destination IP address, formatted "
+          "according to the appropriate convention as defined in "
+          "the AddressType property of this class. \n"
+          "\n"
+          "This property has the same semantics as DestinationMask "
+          "inherited from the NextHopRouting superclass, but a "
+          "different property name. This is because this property "
+          "and class were defined before NextHopRouting and are Key "
+          "properties. They cannot be removed. ModelCorrespondence "
+          "indicates that they should be set to equivalent values "
+          "for consistency and ease of query." ), 
+       ModelCorrespondence { "CIM_IPRoute.DestinationMask" }]
+   string IPDestinationMask;
+
+      [Deprecated { "CIM_NextHopIPRoute.AddressType" }, 
+       Key, Description ( 
+          "An enumeration that describes the format of the address "
+          "property. Addresses that can be formatted in IPv4 "
+          "format, must be formatted that way to ensure mixed "
+          "IPv4/IPv6 support. \n"
+          "\n"
+          "AddressType is part of the key so that an IPv4 and an "
+          "IPv6 route to IP subnets with the same network number "
+          "but different IP versions (v4/v6) can coexist." ), 
+       ValueMap { "0", "1", "2" }, 
+       Values { "Unknown", "IPv4", "IPv6" }]
+   uint16 AddressType;
+
+      [Deprecated { "No value" }, 
+       Override ( "DestinationAddress" ), 
+       ModelCorrespondence { "CIM_IPRoute.IPDestinationAddress" }]
+   string DestinationAddress;
+
+      [Deprecated { "No value" }, 
+       Override ( "DestinationMask" ), 
+       ModelCorrespondence { "CIM_IPRoute.IPDestinationMask" }]
+   string DestinationMask;
+       
+};

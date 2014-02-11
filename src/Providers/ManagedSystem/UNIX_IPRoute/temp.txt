@@ -1,0 +1,442 @@
+﻿
+static int
+kvmd_init(void)
+{
+	char errbuf[_POSIX2_LINE_MAX];
+
+	if (kvmd != NULL)
+		return (0);
+
+	kvmd = kvm_openfiles(nlistf, memf, NULL, O_RDONLY, errbuf);
+	setgid(getgid());
+
+	if (kvmd == NULL) {
+		warnx("kvm not available: %s", errbuf);
+		return (-1);
+	}
+
+	return (0);
+}
+
+/*
+ * Resolve symbol list, return 0 on success.
+ */
+int
+kresolve_list(struct nlist *_nl)
+{
+
+	if ((kvmd == NULL) && (kvmd_init() != 0))
+		return (-1);
+
+	if (_nl[0].n_type != 0)
+		return (0);
+
+	if (kvm_nlist(kvmd, _nl) < 0) {
+		if (nlistf)
+			errx(1, "%s: kvm_nlist: %s", nlistf,
+			     kvm_geterr(kvmd));
+		else
+			errx(1, "kvm_nlist: %s", kvm_geterr(kvmd));
+	}
+
+	return (0);
+}
+
+/*
+ * Read kernel memory, return 0 on success.
+ */
+int
+kread(u_long addr, void *buf, size_t size)
+{
+
+	if (kvmd_init() < 0)
+		return (-1);
+
+	if (!buf)
+		return (0);
+	if (kvm_read(kvmd, addr, buf, size) != (ssize_t)size) {
+		warnx("%s", kvm_geterr(kvmd));
+		return (-1);
+	}
+	return (0);
+}
+
+
+char *
+routename(in_addr_t in)
+{
+        char *cp;
+        static char line[MAXHOSTNAMELEN];
+        struct hostent *hp;
+      
+        cp = 0;
+        /*if (!numeric_addr) { */
+                hp = gethostbyaddr(&in, sizeof (struct in_addr), AF_INET);
+                if (hp) {
+                        cp = hp->h_name;
+                        trimdomain(cp, strlen(cp));
+                }
+        /*} */
+        if (cp) {
+                strlcpy(line, cp, sizeof(line));
+        } else {
+#define C(x)    ((x) & 0xff)
+                in = ntohl(in);
+                sprintf(line, "%u.%u.%u.%u",
+                    C(in >> 24), C(in >> 16), C(in >> 8), C(in));
+
+        }
+        return (line);
+}
+
+void print_route(struct mfc *m, const int i)
+{
+  	cout << "Printing Route " << i << endl;
+	printf(" %-15.15s", routename(m->mfc_origin.s_addr));
+	printf(" %-15.15s", routename(m->mfc_mcastgrp.s_addr));
+	printf(" %9lu", m->mfc_pkt_cnt);
+	printf("  %3d   ", m->mfc_parent);
+}
+
+/* Print an internet address. */
+
+void
+print_ip (const char * name, struct ifaddrs * ifaddrs_ptr, void * addr_ptr)
+{
+    if (addr_ptr) {
+
+	/* This constant is defined in <netinet/in.h>. */
+
+	char address[INET6_ADDRSTRLEN];
+
+	inet_ntop (ifaddrs_ptr->ifa_addr->sa_family,
+		   addr_ptr,
+		   address, sizeof (address));
+
+        /* The "toupper" capitalizes the first letter. */
+
+	printf ("%c%s: <%s>\n", toupper (name[0]), name + 1, address);
+    }
+    else {
+	printf ("No %s\n", name);
+    }
+}
+
+/* Get a pointer to the address structure from a sockaddr. */
+
+void *
+get_addr_ptr (struct sockaddr * sockaddr_ptr)
+{
+    void * addr_ptr = 0;
+    if (sockaddr_ptr->sa_family == AF_INET) {
+        addr_ptr = &((struct sockaddr_in *)  sockaddr_ptr)->sin_addr;
+    }
+    else if (sockaddr_ptr->sa_family == AF_INET6) {
+        addr_ptr = &((struct sockaddr_in6 *) sockaddr_ptr)->sin6_addr;
+    }
+    return addr_ptr;
+}
+
+
+void getRouteEntries()
+{
+	struct mfc *mfctable;
+	size_t len;
+	len = sizeof(mfctable);
+	cout << "Printing route table" << endl;
+	if (sysctlbyname("net.inet.ip.mfctable", NULL, &len, NULL, - 0) == 0) {
+		cout << "Count:" << len << endl;
+		mfctable = (mfc*)malloc(len);
+		if (sysctlbyname("net.inet.ip.mfctable", mfctable, &len, NULL, - 0) == 0) {
+			struct mfc *m = mfctable;
+			for(int i = 0; i < len; i++)
+			{
+				/* print_route(m++, i); */
+			}
+		}
+		free(mfctable);
+	}
+}
+
+/* Print the internet address. */
+
+void
+print_internet_address (struct ifaddrs * ifaddrs_ptr)
+{
+    void * addr_ptr;
+    if (! ifaddrs_ptr->ifa_addr) {
+	return;
+    }
+    addr_ptr = get_addr_ptr (ifaddrs_ptr->ifa_addr);
+    print_ip ("internet address", ifaddrs_ptr, addr_ptr);
+}
+
+/* Print the netmask. */
+
+void
+print_netmask (struct ifaddrs * ifaddrs_ptr)
+{
+    void * addr_ptr;
+    if (! ifaddrs_ptr->ifa_netmask) {
+	return;
+    }
+    addr_ptr = get_addr_ptr (ifaddrs_ptr->ifa_netmask);
+    print_ip ("netmask", ifaddrs_ptr, addr_ptr);
+}
+
+/* Print the mac address. */
+
+void
+print_mac_address (const char * mac_address)
+{
+    int mac_addr_offset;
+
+    printf ("Mac address: ");
+    for (mac_addr_offset = 0; mac_addr_offset < 6; mac_addr_offset++) {
+        unsigned char byte;
+        
+        byte = (unsigned char) mac_address[mac_addr_offset];
+	printf ("%02x", byte);
+	if (mac_addr_offset != 5) {
+	    printf (":");
+        }
+    }
+    printf ("\n");
+}
+
+/* Adapted from http://othermark.livejournal.com/3005.html */
+
+void
+print_af_link (struct ifaddrs * ifaddrs_ptr)
+{
+    struct sockaddr_dl * sdl;
+
+    sdl = (struct sockaddr_dl *) ifaddrs_ptr->ifa_addr;
+
+    /* The types "IFT_ETHER" and so on are defined in
+       <net/if_types.h>. */
+
+    if (sdl->sdl_type == IFT_ETHER) {
+	print_mac_address (LLADDR (sdl));
+    }
+    else if (sdl->sdl_type == IFT_LOOP) {
+	printf ("Loopback.\n");
+    }
+    else if (sdl->sdl_type == IFT_USB) {
+	printf ("USB interface.\n");
+    }
+    else {
+	printf ("Link of type %d\n", sdl->sdl_type);
+    }
+}
+
+void
+print_internet_interface (struct ifaddrs * ifaddrs_ptr)
+{
+    print_internet_address (ifaddrs_ptr);
+    print_netmask (ifaddrs_ptr);
+
+    /* P2P interface destination */
+
+    if (ifaddrs_ptr->ifa_dstaddr) {
+	void * addr_ptr;
+
+        addr_ptr = get_addr_ptr (ifaddrs_ptr->ifa_dstaddr);
+	print_ip ("destination address", ifaddrs_ptr, addr_ptr);
+    }
+
+    /* Interface broadcast address */
+
+    if (ifaddrs_ptr->ifa_broadaddr) {
+	void * addr_ptr;
+
+	addr_ptr = get_addr_ptr (ifaddrs_ptr->ifa_broadaddr);
+	print_ip ("broadcast address", ifaddrs_ptr, addr_ptr);
+    }
+}
+
+/* Adapted from
+   http://publib.boulder.ibm.com/infocenter/iseries/v6r1m0/index.jsp?topic=/apis/getifaddrs.htm */
+
+
+void
+print_ifaddrs (struct ifaddrs * ifaddrs_ptr)
+{
+    printf ("Name: %s; Flags: 0x%x; ",
+            ifaddrs_ptr->ifa_name, ifaddrs_ptr->ifa_flags);
+
+    /* Decide what to do based on the family. */
+
+    if (ifaddrs_ptr->ifa_addr->sa_family == AF_INET) {
+
+        /* AF_INET is defined in <sys/socket.h>. */
+
+        printf ("Family: AF_INET\n");
+        print_internet_interface (ifaddrs_ptr);
+    }
+    else if (ifaddrs_ptr->ifa_addr->sa_family == AF_INET6) {
+        printf ("Family: AF_INET6\n");
+        print_internet_interface (ifaddrs_ptr);
+    }
+    else if (ifaddrs_ptr->ifa_addr->sa_family == AF_LINK) {
+        printf ("Family: AF_LINK\n");
+        print_af_link (ifaddrs_ptr);
+    }
+    else {
+        printf ("Unknown family");
+    }
+
+    /* Print a line between this entry and the next. */
+
+    printf ("\n");
+}
+
+
+void print_ifaces()
+{
+	struct ifaddrs *ifap, *ifa;
+	/*
+	 * Retrieve interface list at first
+	 * since we need #ifindex -> if_xname match
+	 */
+	if (getifaddrs(&ifap) != 0)
+		return;
+		/* err(EX_OSERR, "getifaddrs"); */
+	
+	for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
+		print_ifaddrs (ifa);
+	}
+    /* Free the memory associated with "ifap". */
+    freeifaddrs (ifap);
+}
+
+static void
+size_cols(int ef, struct radix_node *rn)
+{
+	wid_dst = WID_DST_DEFAULT(ef);
+	wid_gw = WID_GW_DEFAULT(ef);
+	wid_flags = 6;
+	wid_refs = 6;
+	wid_use = 8;
+	wid_mtu = 6;
+	wid_if = WID_IF_DEFAULT(ef);
+	wid_expire = 6;
+
+	if (rn != NULL) /* Wflag &&  */
+		size_cols_tree(rn);
+}
+
+static void
+size_cols_tree(struct radix_node *rn)
+{
+again:
+	if (kget(rn, rnode) != 0)
+		return;
+	if (!(rnode.rn_flags & RNF_ACTIVE))
+		return;
+	if (rnode.rn_bit < 0) {
+		if ((rnode.rn_flags & RNF_ROOT) == 0) {
+			if (kget(rn, rtentry) != 0)
+				return;
+			size_cols_rtentry(&rtentry);
+		}
+		if ((rn = rnode.rn_dupedkey))
+			goto again;
+	} else {
+		rn = rnode.rn_right;
+		size_cols_tree(rnode.rn_left);
+		size_cols_tree(rn);
+	}
+}
+
+static void
+size_cols_rtentry(struct rtentry *rt)
+{
+	static struct ifnet ifnet, *lastif;
+	static char buffer[100];
+	const char *bp;
+	struct sockaddr *sa;
+	sa_u addr, mask;
+	int len;
+
+	bzero(&addr, sizeof(addr));
+	if ((sa = kgetsa(rt_key(rt))))
+		bcopy(sa, &addr, sa->sa_len);
+	bzero(&mask, sizeof(mask));
+	if (rt_mask(rt) && (sa = kgetsa(rt_mask(rt))))
+		bcopy(sa, &mask, sa->sa_len);
+	bp = fmt_sockaddr(&addr.u_sa, &mask.u_sa, rt->rt_flags);
+	len = strlen(bp);
+	wid_dst = MAX(len, wid_dst);
+
+	bp = fmt_sockaddr(kgetsa(rt->rt_gateway), NULL, RTF_HOST);
+
+	len = strlen(bp);
+	wid_gw = MAX(len, wid_gw);
+
+	bp = fmt_flags(rt->rt_flags);
+	len = strlen(bp);
+	wid_flags = MAX(len, wid_flags);
+
+	/* if (addr.u_sa.sa_family == AF_INET || Wflag) { */
+		len = snprintf(buffer, sizeof(buffer), "%d", rt->rt_refcnt);
+		wid_refs = MAX(len, wid_refs);
+		len = snprintf(buffer, sizeof(buffer), "%lu", rt->rt_use);
+		wid_use = MAX(len, wid_use);
+		if (rt->rt_rmx.rmx_mtu != 0) { /* Wflag && */
+			len = snprintf(buffer, sizeof(buffer),
+				       "%lu", rt->rt_rmx.rmx_mtu);
+			wid_mtu = MAX(len, wid_mtu);
+		}
+	/* } */
+	if (rt->rt_ifp) {
+		if (rt->rt_ifp != lastif) {
+			if (kget(rt->rt_ifp, ifnet) == 0) 
+				len = strlen(ifnet.if_xname);
+			else
+				len = strlen("---");
+			lastif = rt->rt_ifp;
+			wid_if = MAX(len, wid_if);
+		}
+		if (rt->rt_rmx.rmx_expire) {
+			time_t expire_time;
+
+			if ((expire_time =
+			    rt->rt_rmx.rmx_expire - uptime.tv_sec) > 0) {
+				len = snprintf(buffer, sizeof(buffer), "%d",
+					       (int)expire_time);
+				wid_expire = MAX(len, wid_expire);
+			}
+		}
+	}
+}
+
+
+/*
+ * Print header for routing table columns.
+ */
+void
+pr_rthdr(int af1)
+{
+	/* if (Aflag) */
+		/* printf("%-8.8s ","Address"); */
+	/* if (Wflag) { */
+	/*
+		printf("%-*.*s %-*.*s %-*.*s %*.*s %*.*s %*s\n",
+			wid_dst,	wid_dst,	"Destination",
+			wid_gw,		wid_gw,		"Gateway",
+			wid_flags,	wid_flags,	"Flags",
+			wid_mtu,	wid_mtu,	"Mtu",
+			wid_if,		wid_if,		"Netif",
+			wid_expire,			"Expire");
+	*/
+	/* } else {
+
+		printf("%-*.*s %-*.*s %-*.*s  %*.*s %*s\n",
+			wid_dst,	wid_dst,	"Destination",
+			wid_gw,		wid_gw,		"Gateway",
+			wid_flags,	wid_flags,	"Flags",
+			wid_if,		wid_if,		"Netif",
+			wid_expire,			"Expire");
+	} */
+}

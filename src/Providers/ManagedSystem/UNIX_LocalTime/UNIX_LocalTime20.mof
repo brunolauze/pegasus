@@ -1,0 +1,70 @@
+﻿[Abstract, Description (
+     "CurrentTime is an abstract class that provides a common "  
+     "superclass (or top of the inheritance tree) for the "
+     "current system time.")]
+class CIM_CurrentTime
+{
+   [Key, MaxLen (256),
+       Description ("The scoping ComputerSystem's CreationClassName.") ]
+   string CSCreationClassName;
+   [Key, MaxLen (256),
+       Description ("The scoping ComputerSystem's Name.") ]
+   string CSName;
+      [Key, MaxLen (256),
+       Description (
+        "CreationClassName indicates the name of the class or the "
+        "subclass used in the creation of an instance. When used "
+        "with the other key properties of this class, this property "
+        "allows all instances of this class and its subclasses to "
+        "be uniquely identified.") ]
+  string CreationClassName;
+  [Description (
+       "Number representing the current day") ]
+  uint32 Day;
+  [Description (
+       "Number representing the current day of the week") ]
+  uint32 DayOfWeek;
+  [Description (
+       "Number representing the current hour") ]
+  uint32 Hour;
+  [Description (
+       "Number representing the current millisecond") ]
+  uint32 Milliseconds;
+  [Description (
+       "Number representing the current minute") ]
+  uint32 Minute;
+  [Description (
+       "Number representing the current month") ]
+  uint32 Month;
+  [Description (
+       "Number representing the current quarter") ]
+  uint32 Quarter;
+  [Description (
+       "Number representing the current second") ]
+  uint32 Second;
+  [Description (
+       "Number representing the current week in the month") ]
+  uint32 WeekInMonth;
+  [Description (
+       "Number representing the current year") ]
+  uint32 Year;
+[Description (
+       "Number representing the current timezone offset") ]
+  uint32 TimeZoneOffset;
+};
+
+
+[Abstract, Description (
+     "CurrentTime is an abstract class that provides a common "  
+     "superclass (or top of the inheritance tree) for the "
+     "current system time.")]
+class UNIX_CurrentTime : CIM_CurrentTime
+{
+
+};
+
+class UNIX_LocalTime : UNIX_CurrentTime
+{
+	
+}
+

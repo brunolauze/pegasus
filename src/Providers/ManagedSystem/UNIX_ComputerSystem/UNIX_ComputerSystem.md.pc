@@ -1,0 +1,5 @@
+Name: UNIX_ComputerSystem
+Description: 
+Version: 0.1
+Libs: -L"/usr/home/bruno/Projects/OpenPegasusProviders/UNIX_ComputerSystem/bin/Debug" -lUNIX_ComputerSystem
+Cflags: -I"/usr/home/bruno/Projects/OpenPegasusProviders/UNIX_ComputerSystem"

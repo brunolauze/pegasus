@@ -1,4 +1,4 @@
-#//%LICENSE////////////////////////////////////////////////////////////////
+﻿#//%LICENSE////////////////////////////////////////////////////////////////
 #//
 #// Licensed to The Open Group (TOG) under one or more contributor license
 #// agreements.  Refer to the OpenPegasusNOTICE.txt file distributed with
@@ -26,27 +26,45 @@
 #// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #//
 #//////////////////////////////////////////////////////////////////////////
-#
-# Recurse the directories defined in DIRS
-#
+#//
+#// Author: Christopher Neufeld <neufeld@linuxcare.com>
+#//         David Kennedy       <dkennedy@linuxcare.com>
+#//
+#// Modified By: David Kennedy       <dkennedy@linuxcare.com>
+#//              Christopher Neufeld <neufeld@linuxcare.com>
+#//		 Mike Glantz <michael_glantz@hp.com>
+#//		 Sean Keenan Hewlett-Packard Company <sean.keenan@hp.com>
+#//
+#//%////////////////////////////////////////////////////////////////////////////
 
-ROOT = ../../..
+ROOT = ../../../..
+
+DIR = Providers/ManagedSystem/UNIX_NTPService
 
 include $(ROOT)/mak/config.mak
 
-DIRS =  \
-	UNIX_OperatingSystem \
-	UNIX_ComputerSystem \
-	UNIX_Process \
-	UNIX_LocalTime \
-	UNIX_Account \
-	UNIX_LogicalDisk \
-	UNIX_SoftwareElement \
-	UNIX_IPEndPoint \
-	UNIX_IPRoute \
-	UNIX_DNSService \
-	UNIX_NTPService
+LIBRARY = UNIX_NTPServiceModule
 
-TEST_DIRS = 
+EXTRA_INCLUDES = \
+	-I./../UNIX_Common
 
-include $(ROOT)/mak/recurse.mak
+SOURCES = \
+	UNIX_NTPServiceProvider.cpp \
+	UNIX_NTPServiceMain.cpp \
+    UNIX_NTPService.cpp \
+   	smartdisk_client.cpp \
+   	zfs_client.cpp
+
+LIBRARIES = \
+    pegprovider \
+    pegclient \
+    pegcommon
+
+EXTRA_LIBRARIES+= -lutil
+
+include $(ROOT)/mak/dynamic-library.mak
+
+tests:
+
+poststarttests:
+

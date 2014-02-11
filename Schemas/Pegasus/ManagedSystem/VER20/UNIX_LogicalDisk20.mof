@@ -1,0 +1,1168 @@
+//%LICENSE////////////////////////////////////////////////////////////////
+//
+// Licensed to The Open Group (TOG) under one or more contributor license
+// agreements.  Refer to the OpenPegasusNOTICE.txt file distributed with
+// this work for additional information regarding copyright ownership.
+// Each contributor licenses this file to you under the OpenPegasus Open
+// Source License; you may not use this file except in compliance with the
+// License.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the "Software"),
+// to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense,
+// and/or sell copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+// CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+//////////////////////////////////////////////////////////////////////////
+// =============================================================================
+// Title:              UNIX_LogicalDisk  MOF  
+// Filename:           UNIX_LogicalDisk20.mof
+// Date:               02/03/2014
+// Description:        This file specifies the UNIX_LogicalDisk class
+//
+// This class definitions contained in this file are:
+//   CIM_ManagedElement
+//   CIM_ManagedSystemElement
+//   CIM_LogicalElement
+//   CIM_EnabledLogicalElement 
+//   CIM_LogicalDevice
+//	 CIM_StorageExtent
+//   UNIX_LogicalDisk
+// =============================================================================
+
+// =============================================================================
+// Copyright 1998-2003 Distributed Management Task Force, Inc. (DMTF).
+// All rights reserved.
+// DMTF is a not-for-profit association of industry members dedicated
+// to promoting enterprise and systems management and interoperability.
+// DMTF specifications and documents may be reproduced for uses
+// consistent with this purpose by members and non-members,
+// provided that correct attribution is given.
+// As DMTF specifications may be revised from time to time,
+// the particular version and release date should always be noted.
+// ===================================================================
+
+// ==================================================================
+// ManagedElement
+// ================================================================== 
+   [Abstract, Description (
+     "ManagedElement is an abstract class that provides a common "  
+     "superclass (or top of the inheritance tree) for the "
+     "non-association classes in the CIM Schema.")]
+class CIM_ManagedElement {  
+      [MaxLen (64), Description (  
+        "The Caption property is a short textual description (one-"    
+        "line string) of the object.") ]   
+   string Caption;  
+      [Description (  
+        "The Description property provides a textual description of "
+        "the object.") ]   
+   string Description;    
+};
+     
+
+// ================================================================== 
+//    ManagedSystemElement
+// ==================================================================
+   [Abstract, Description (
+     "CIM_ManagedSystemElement is the base class for the System "
+     "Element hierarchy. Membership Criteria: Any distinguishable "
+     "component of a System is a candidate for inclusion in this "
+     "class. Examples: software components, such as files; and "
+     "devices, such as disk drives and controllers, and physical "
+     "components such as chips and cards.") ] 
+class CIM_ManagedSystemElement : CIM_ManagedElement {
+      [Description (
+        "A datetime value indicating when the object was installed. "
+        "A lack of a value does not indicate that the object is not "
+        "installed."), 
+       MappingStrings {"MIF.DMTF|ComponentID|001.5"} ] 
+   datetime InstallDate;
+      [MaxLen (256), Description (
+        "The Name property defines the label by which the object is "
+        "known. When subclassed, the Name property can be overridden "
+        "to be a Key property.") ] 
+   string Name;
+      [MaxLen (10), Description ( 
+        "  A string indicating the current status of the object. " 
+        "Various operational and non-operational statuses are " 
+        "defined. Operational statuses are \"OK\", \"Degraded\", " 
+        "\"Stressed\" and \"Pred Fail\". \"Stressed\" indicates that " 
+        "the Element is functioning, but needs attention. Examples " 
+        "of \"Stressed\" states are overload, overheated, etc. The " 
+        "condition \"Pred Fail\" (failure predicted) indicates that " 
+        "an Element is functioning properly but predicting a failure " 
+        "in the near future. An example is a SMART-enabled hard " 
+        "drive. \n" 
+        "  Non-operational statuses can also be specified. These " 
+        "are \"Error\", \"NonRecover\", \"Starting\", \"Stopping\", " 
+        " \"Stopped\", " 
+        "\"Service\", \"No Contact\" and \"Lost Comm\". \"NonRecover\" " 
+        "indicates that a non-recoverable error has occurred. " 
+        "\"Service\" describes an Element being configured, maintained, " 
+        "cleaned, or otherwise administered. This status could apply " 
+        "during mirror-resilvering of a disk, reload of a user " 
+        "permissions list, or other administrative task. Not all such " 
+        "work is on-line, yet the Element is neither \"OK\" nor in " 
+        "one of the other states. \"No Contact\" indicates that the " 
+        "current instance of the monitoring system has knowledge of " 
+        "this Element but has never been able to establish " 
+        "communications with it. \"Lost Comm\" indicates that " 
+        "the ManagedSystemElement is known to exist and has been " 
+        "contacted successfully in the past, but is currently unreachable." 
+        "\"Stopped\" indicates that the ManagedSystemElement is known " 
+        "to exist, it is not operational (i.e. it is unable to " 
+        "provide service to users), but it has not failed. It has purposely " 
+        "been made non-operational. The Element " 
+        "may have never been \"OK\", the Element may have initiated its " 
+        "own stop, or a management system may have initiated the stop."), 
+       ValueMap {"OK", "Error", "Degraded", "Unknown", "Pred Fail", 
+                 "Starting", "Stopping", "Service", "Stressed", 
+                 "NonRecover", "No Contact", "Lost Comm", "Stopped"} ] 
+   string Status; 
+};
+
+
+// ==================================================================
+//    LogicalElement
+// ==================================================================
+   [Abstract, Description (
+     "CIM_LogicalElement is a base class for all the components of "
+     "a System that represent abstract system components, such "
+     "as Files, Processes, or system capabilities in the form "
+     "of Logical Devices.") ] 
+class CIM_LogicalElement : CIM_ManagedSystemElement {
+};
+
+     
+// Copyright (c) 2009 DMTF.  All rights reserved.
+   [Abstract, Version ( "2.22.0" ), 
+    UMLPackagePath ( "CIM::Core::CoreElements" ), 
+    Description ( 
+       "This class extends LogicalElement to abstract the concept of "
+       "an element that is enabled and disabled, such as a "
+       "LogicalDevice or a ServiceAccessPoint." )]
+class CIM_EnabledLogicalElement : CIM_LogicalElement {
+
+      [Description ( 
+          "EnabledState is an integer enumeration that indicates "
+          "the enabled and disabled states of an element. It can "
+          "also indicate the transitions between these requested "
+          "states. For example, shutting down (value=4) and "
+          "starting (value=10) are transient states between enabled "
+          "and disabled. The following text briefly summarizes the "
+          "various enabled and disabled states: \n"
+          "Enabled (2) indicates that the element is or could be "
+          "executing commands, will process any queued commands, "
+          "and queues new requests. \n"
+          "Disabled (3) indicates that the element will not execute "
+          "commands and will drop any new requests. \n"
+          "Shutting Down (4) indicates that the element is in the "
+          "process of going to a Disabled state. \n"
+          "Not Applicable (5) indicates the element does not "
+          "support being enabled or disabled. \n"
+          "Enabled but Offline (6) indicates that the element might "
+          "be completing commands, and will drop any new requests. \n"
+          "Test (7) indicates that the element is in a test state. \n"
+          "Deferred (8) indicates that the element might be "
+          "completing commands, but will queue any new requests. \n"
+          "Quiesce (9) indicates that the element is enabled but in "
+          "a restricted mode.\n"
+          "Starting (10) indicates that the element is in the "
+          "process of going to an Enabled state. New requests are "
+          "queued." ), 
+       ValueMap { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", 
+          "10", "11..32767", "32768..65535" }, 
+       Values { "Unknown", "Other", "Enabled", "Disabled", 
+          "Shutting Down", "Not Applicable", "Enabled but Offline", 
+          "In Test", "Deferred", "Quiesce", "Starting", 
+          "DMTF Reserved", "Vendor Reserved" }, 
+       ModelCorrespondence { 
+          "CIM_EnabledLogicalElement.OtherEnabledState" }]
+   uint16 EnabledState = 5;
+
+      [Description ( 
+          "A string that describes the enabled or disabled state of "
+          "the element when the EnabledState property is set to 1 "
+          "(\"Other\"). This property must be set to null when "
+          "EnabledState is any value other than 1." ), 
+       ModelCorrespondence { "CIM_EnabledLogicalElement.EnabledState" }]
+   string OtherEnabledState;
+
+      [Description ( 
+          "RequestedState is an integer enumeration that indicates "
+          "the last requested or desired state for the element, "
+          "irrespective of the mechanism through which it was "
+          "requested. The actual state of the element is "
+          "represented by EnabledState. This property is provided "
+          "to compare the last requested and current enabled or "
+          "disabled states. Note that when EnabledState is set to 5 "
+          "(\"Not Applicable\"), then this property has no meaning. "
+          "Refer to the EnabledState property description for "
+          "explanations of the values in the RequestedState "
+          "enumeration. \n"
+          "\"Unknown\" (0) indicates the last requested state for "
+          "the element is unknown.\n"
+          "Note that the value \"No Change\" (5) has been "
+          "deprecated in lieu of indicating the last requested "
+          "state is \"Unknown\" (0). If the last requested or "
+          "desired state is unknown, RequestedState should have the "
+          "value \"Unknown\" (0), but may have the value \"No "
+          "Change\" (5).Offline (6) indicates that the element has "
+          "been requested to transition to the Enabled but Offline "
+          "EnabledState. \n"
+          "It should be noted that there are two new values in "
+          "RequestedState that build on the statuses of "
+          "EnabledState. These are \"Reboot\" (10) and \"Reset\" "
+          "(11). Reboot refers to doing a \"Shut Down\" and then "
+          "moving to an \"Enabled\" state. Reset indicates that the "
+          "element is first \"Disabled\" and then \"Enabled\". The "
+          "distinction between requesting \"Shut Down\" and "
+          "\"Disabled\" should also be noted. Shut Down requests an "
+          "orderly transition to the Disabled state, and might "
+          "involve removing power, to completely erase any existing "
+          "state. The Disabled state requests an immediate "
+          "disabling of the element, such that it will not execute "
+          "or accept any commands or processing requests. \n"
+          "\n"
+          "This property is set as the result of a method "
+          "invocation (such as Start or StopService on "
+          "CIM_Service), or can be overridden and defined as "
+          "WRITEable in a subclass. The method approach is "
+          "considered superior to a WRITEable property, because it "
+          "allows an explicit invocation of the operation and the "
+          "return of a result code. \n"
+          "\n"
+          "If knowledge of the last RequestedState is not supported "
+          "for the EnabledLogicalElement, the property shall be "
+          "NULL or have the value 12 \"Not Applicable\"." ), 
+       ValueMap { "0", "2", "3", "4", "5", "6", "7", "8", "9", "10", 
+          "11", "12", "..", "32768..65535" }, 
+       Values { "Unknown", "Enabled", "Disabled", "Shut Down", 
+          "No Change", "Offline", "Test", "Deferred", "Quiesce", 
+          "Reboot", "Reset", "Not Applicable", "DMTF Reserved", 
+          "Vendor Reserved" }, 
+       ModelCorrespondence { "CIM_EnabledLogicalElement.EnabledState" }]
+   uint16 RequestedState = 12;
+
+      [Write, Description ( 
+          "An enumerated value indicating an administrator\'s "
+          "default or startup configuration for the Enabled State "
+          "of an element. By default, the element is \"Enabled\" "
+          "(value=2)." ), 
+       ValueMap { "2", "3", "5", "6", "7", "9", "..", "32768..65535" }, 
+       Values { "Enabled", "Disabled", "Not Applicable", 
+          "Enabled but Offline", "No Default", "Quiesce", 
+          "DMTF Reserved", "Vendor Reserved" }]
+   uint16 EnabledDefault = 2;
+
+      [Description ( 
+          "The date or time when the EnabledState of the element "
+          "last changed. If the state of the element has not "
+          "changed and this property is populated, then it must be "
+          "set to a 0 interval value. If a state change was "
+          "requested, but rejected or not yet processed, the "
+          "property must not be updated." )]
+   datetime TimeOfLastStateChange;
+
+      [Description ( 
+          "AvailableRequestedStates indicates the possible values "
+          "for the RequestedState parameter of the method "
+          "RequestStateChange, used to initiate a state change. The "
+          "values listed shall be a subset of the values contained "
+          "in the RequestedStatesSupported property of the "
+          "associated instance of "
+          "CIM_EnabledLogicalElementCapabilities where the values "
+          "selected are a function of the current state of the "
+          "CIM_EnabledLogicalElement. This property may be non-null "
+          "if an implementation is able to advertise the set of "
+          "possible values as a function of the current state. This "
+          "property shall be null if an implementation is unable to "
+          "determine the set of possible values as a function of "
+          "the current state." ), 
+       ValueMap { "2", "3", "4", "6", "7", "8", "9", "10", "11", ".." }, 
+       Values { "Enabled", "Disabled", "Shut Down", "Offline", 
+          "Test", "Defer", "Quiesce", "Reboot", "Reset", 
+          "DMTF Reserved" }, 
+       ModelCorrespondence { 
+          "CIM_EnabledLogicalElement.RequestStateChange", 
+          "CIM_EnabledLogicalElementCapabilities.RequestedStatesSupported" }]
+   uint16 AvailableRequestedStates[];
+
+      [Description ( 
+          "TransitioningToState indicates the target state to which "
+          "the instance is transitioning. \n"
+          "A value of 5 \"No Change\" shall indicate that no "
+          "transition is in progress.A value of 12 \"Not "
+          "Applicable\" shall indicate the implementation does not "
+          "support representing ongoing transitions. \n"
+          "A value other than 5 or 12 shall identify the state to "
+          "which the element is in the process of transitioning." ), 
+       ValueMap { "0", "2", "3", "4", "5", "6", "7", "8", "9", "10", 
+          "11", "12", ".." }, 
+       Values { "Unknown", "Enabled", "Disabled", "Shut Down", 
+          "No Change", "Offline", "Test", "Defer", "Quiesce", 
+          "Reboot", "Reset", "Not Applicable", "DMTF Reserved" }, 
+       ModelCorrespondence { 
+          "CIM_EnabledLogicalElement.RequestStateChange", 
+          "CIM_EnabledLogicalElement.RequestedState", 
+          "CIM_EnabledLogicalElement.EnabledState" }]
+   uint16 TransitioningToState = 12;
+
+
+      [Description ( 
+          "Requests that the state of the element be changed to the "
+          "value specified in the RequestedState parameter. When "
+          "the requested state change takes place, the EnabledState "
+          "and RequestedState of the element will be the same. "
+          "Invoking the RequestStateChange method multiple times "
+          "could result in earlier requests being overwritten or "
+          "lost. \n"
+          "A return code of 0 shall indicate the state change was "
+          "successfully initiated. \n"
+          "A return code of 3 shall indicate that the state "
+          "transition cannot complete within the interval specified "
+          "by the TimeoutPeriod parameter. \n"
+          "A return code of 4096 (0x1000) shall indicate the state "
+          "change was successfully initiated, a ConcreteJob has "
+          "been created, and its reference returned in the output "
+          "parameter Job. Any other return code indicates an error "
+          "condition." ), 
+       ValueMap { "0", "1", "2", "3", "4", "5", "6", "..", "4096", 
+          "4097", "4098", "4099", "4100..32767", "32768..65535" }, 
+       Values { "Completed with No Error", "Not Supported", 
+          "Unknown or Unspecified Error", 
+          "Cannot complete within Timeout Period", "Failed", 
+          "Invalid Parameter", "In Use", "DMTF Reserved", 
+          "Method Parameters Checked - Job Started", 
+          "Invalid State Transition", 
+          "Use of Timeout Parameter Not Supported", "Busy", 
+          "Method Reserved", "Vendor Specific" }, 
+       ModelCorrespondence { 
+          "CIM_EnabledLogicalElement.RequestedState" }]
+   uint32 RequestStateChange(
+         [IN, Description ( 
+             "The state requested for the element. This "
+             "information will be placed into the RequestedState "
+             "property of the instance if the return code of the "
+             "RequestStateChange method is 0 (\'Completed with "
+             "No Error\'), or 4096 (0x1000) (\'Job Started\'). "
+             "Refer to the description of the EnabledState and "
+             "RequestedState properties for the detailed "
+             "explanations of the RequestedState values." ), 
+          ValueMap { "2", "3", "4", "6", "7", "8", "9", "10", 
+             "11", "..", "32768..65535" }, 
+          Values { "Enabled", "Disabled", "Shut Down", "Offline", 
+             "Test", "Defer", "Quiesce", "Reboot", "Reset", 
+             "DMTF Reserved", "Vendor Reserved" }, 
+          ModelCorrespondence { 
+             "CIM_EnabledLogicalElement.RequestedState" }]
+      uint16 RequestedState, 
+         [IN ( false ), OUT, Description ( 
+             "May contain a reference to the ConcreteJob created "
+             "to track the state transition initiated by the "
+             "method invocation." )]
+      CIM_ConcreteJob REF Job, 
+         [IN, Description ( 
+             "A timeout period that specifies the maximum amount "
+             "of time that the client expects the transition to "
+             "the new state to take. The interval format must be "
+             "used to specify the TimeoutPeriod. A value of 0 or "
+             "a null parameter indicates that the client has no "
+             "time requirements for the transition. \n"
+             "If this property does not contain 0 or null and "
+             "the implementation does not support this "
+             "parameter, a return code of \'Use Of Timeout "
+             "Parameter Not Supported\' shall be returned." )]
+      datetime TimeoutPeriod);
+
+};
+
+// Copyright (c) 2005 DMTF.  All rights reserved.
+   [Abstract, Version ( "2.8.0" ), 
+    UMLPackagePath ( "CIM::Core::Device" ), 
+    Description ( 
+       "An abstraction or emulation of a hardware entity, that may or "
+       "may not be Realized in physical hardware. Any characteristics "
+       "of a LogicalDevice that are used to manage its operation or "
+       "configuration are contained in, or associated with, the "
+       "LogicalDevice object. Examples of the operational properties "
+       "of a Printer would be paper sizes supported, or detected "
+       "errors. Examples of the configuration properties of a Sensor "
+       "Device would be threshold settings. Various configurations "
+       "could exist for a LogicalDevice. These configurations could be "
+       "contained in Setting objects and associated with the "
+       "LogicalDevice." )]
+class CIM_LogicalDevice : CIM_EnabledLogicalElement {
+
+      [Key, Description ( "The scoping System\'s CreationClassName." ), 
+       MaxLen ( 256 ), 
+       Propagated ( "CIM_System.CreationClassName" )]
+   string SystemCreationClassName;
+
+      [Key, Description ( "The scoping System\'s Name." ), 
+       MaxLen ( 256 ), 
+       Propagated ( "CIM_System.Name" )]
+   string SystemName;
+
+      [Key, Description ( 
+          "CreationClassName indicates the name of the class or the "
+          "subclass used in the creation of an instance. When used "
+          "with the other key properties of this class, this "
+          "property allows all instances of this class and its "
+          "subclasses to be uniquely identified." ), 
+       MaxLen ( 256 )]
+   string CreationClassName;
+
+      [Key, Description ( 
+          "An address or other identifying information to uniquely "
+          "name the LogicalDevice." ), 
+       MaxLen ( 64 )]
+   string DeviceID;
+
+      [Deprecated { "CIM_PowerManagementCapabilities" }, 
+       Description ( 
+          "Boolean indicating that the Device can be power managed. "
+          "The use of this property has been deprecated. Instead, "
+          "the existence of an associated "
+          "PowerManagementCapabilities class (associated using the "
+          "ElementCapabilities relationhip) indicates that power "
+          "management is supported." )]
+   boolean PowerManagementSupported;
+
+      [Deprecated { 
+          "CIM_PowerManagementCapabilities.PowerCapabilities" }, 
+       Description ( 
+          "An enumerated array describing the power management "
+          "capabilities of the Device. The use of this property has "
+          "been deprecated. Instead, the PowerCapabilites property "
+          "in an associated PowerManagementCapabilities class "
+          "should be used." ), 
+       ValueMap { "0", "1", "2", "3", "4", "5", "6", "7" }, 
+       Values { "Unknown", "Not Supported", "Disabled", "Enabled", 
+          "Power Saving Modes Entered Automatically", 
+          "Power State Settable", "Power Cycling Supported", 
+          "Timed Power On Supported" }]
+   uint16 PowerManagementCapabilities[];
+
+      [Description ( 
+          "The primary availability and status of the Device. "
+          "(Additional status information can be specified using "
+          "the Additional Availability array property.) For "
+          "example, the Availability property indicates that the "
+          "Device is running and has full power (value=3), or is in "
+          "a warning (4), test (5), degraded (10) or power save "
+          "state (values 13-15 and 17). Regarding the Power Save "
+          "states, these are defined as follows: Value 13 (\"Power "
+          "Save - Unknown\") indicates that the Device is known to "
+          "be in a power save mode, but its exact status in this "
+          "mode is unknown; 14 (\"Power Save - Low Power Mode\") "
+          "indicates that the Device is in a power save state but "
+          "still functioning, and may exhibit degraded performance; "
+          "15 (\"Power Save - Standby\") describes that the Device "
+          "is not functioning but could be brought to full power "
+          "\'quickly\'; and value 17 (\"Power Save - Warning\") "
+          "indicates that the Device is in a warning state, though "
+          "also in a power save mode." ), 
+       ValueMap { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", 
+          "11", "12", "13", "14", "15", "16", "17", "18", "19", 
+          "20", "21" }, 
+       Values { "Other", "Unknown", "Running/Full Power", "Warning", 
+          "In Test", "Not Applicable", "Power Off", "Off Line", 
+          "Off Duty", "Degraded", "Not Installed", "Install Error", 
+          "Power Save - Unknown", "Power Save - Low Power Mode", 
+          "Power Save - Standby", "Power Cycle", 
+          "Power Save - Warning", "Paused", "Not Ready", 
+          "Not Configured", "Quiesced" }, 
+       MappingStrings { "MIF.DMTF|Operational State|006.5", 
+          "MIB.IETF|HOST-RESOURCES-MIB.hrDeviceStatus", 
+          "MIF.DMTF|Host Device|001.5" }, 
+       ModelCorrespondence { 
+          "CIM_LogicalDevice.AdditionalAvailability" }]
+   uint16 Availability;
+
+      [Deprecated { "CIM_EnabledLogicalElement.EnabledState" }, 
+       Description ( 
+          "The StatusInfo property indicates whether the Logical "
+          "Device is in an enabled (value = 3), disabled (value = "
+          "4) or some other (1) or unknown (2) state. If this "
+          "property does not apply to the LogicalDevice, the value, "
+          "5 (\"Not Applicable\"), should be used. StatusInfo has "
+          "been deprecated in lieu of a more clearly named property "
+          "with additional enumerated values (EnabledState), that "
+          "is inherited from ManagedSystemElement. \n"
+          "If a Device is (\"Enabled\")(value=3), it has been "
+          "powered up, and is configured and operational. The "
+          "Device may or may not be functionally active, depending "
+          "on whether its Availability (or AdditionalAvailability) "
+          "indicate that it is (\"Running/Full Power\")(value=3) or "
+          "(\"Off line\") (value=8). In an enabled but offline "
+          "mode, a Device may be performing out-of-band requests, "
+          "such as running Diagnostics. If (\"Disabled\") "
+          "StatusInfo value=4), a Device can only be \"enabled\" or "
+          "powered off. In a personal computer environment, "
+          "(\"Disabled\") means that the Device\'s driver is not "
+          "available in the stack. In other environments, a Device "
+          "can be disabled by removing its configuration file. A "
+          "disabled device is physically present in a System and "
+          "consuming resources, but can not be communicated with "
+          "until a load of a driver, a load of a configuration file "
+          "or some other \"enabling\" activity has occurred." ), 
+       ValueMap { "1", "2", "3", "4", "5" }, 
+       Values { "Other", "Unknown", "Enabled", "Disabled", 
+          "Not Applicable" }, 
+       MappingStrings { "MIF.DMTF|Operational State|006.4" }]
+   uint16 StatusInfo;
+
+      [Deprecated { "CIM_DeviceErrorData.LastErrorCode" }, 
+       Description ( 
+          "LastErrorCode captures the last error code reported by "
+          "the LogicalDevice." )]
+   uint32 LastErrorCode;
+
+      [Deprecated { "CIM_DeviceErrorData.ErrorDescription" }, 
+       Description ( 
+          "ErrorDescription is a free-form string supplying more "
+          "information about the error recorded in LastErrorCode, "
+          "and information on any corrective actions that may be "
+          "taken." )]
+   string ErrorDescription;
+
+      [Deprecated { "CIM_ManagedSystemElement.OperationalStatus" }, 
+       Description ( 
+          "ErrorCleared is a boolean property indicating that the "
+          "error reported in LastErrorCode is now cleared." )]
+   boolean ErrorCleared;
+
+      [Description ( 
+          "OtherIdentifyingInfo captures additional data, beyond "
+          "DeviceID information, that could be used to identify a "
+          "LogicalDevice. One example would be to hold the "
+          "Operating System\'s user friendly name for the Device in "
+          "this property." ), 
+       ArrayType ( "Indexed" ), 
+       MaxLen ( 256 ), 
+       ModelCorrespondence { 
+          "CIM_LogicalDevice.IdentifyingDescriptions" }]
+   string OtherIdentifyingInfo[];
+
+      [Description ( 
+          "The number of consecutive hours that this Device has "
+          "been powered, since its last power cycle." ), 
+       Units ( "Hours" ), 
+       Counter]
+   uint64 PowerOnHours;
+
+      [Description ( 
+          "The total number of hours that this Device has been powered."
+           ), 
+       Units ( "Hours" ), 
+       Counter]
+   uint64 TotalPowerOnHours;
+
+      [Description ( 
+          "An array of free-form strings providing explanations and "
+          "details behind the entries in the OtherIdentifyingInfo "
+          "array. Note, each entry of this array is related to the "
+          "entry in OtherIdentifyingInfo that is located at the "
+          "same index." ), 
+       ArrayType ( "Indexed" ), 
+       ModelCorrespondence { "CIM_LogicalDevice.OtherIdentifyingInfo" }]
+   string IdentifyingDescriptions[];
+
+      [Description ( 
+          "Additional availability and status of the Device, beyond "
+          "that specified in the Availability property. The "
+          "Availability property denotes the primary status and "
+          "availability of the Device. In some cases, this will not "
+          "be sufficient to denote the complete status of the "
+          "Device. In those cases, the AdditionalAvailability "
+          "property can be used to provide further information. For "
+          "example, a Device\'s primary Availability may be \"Off "
+          "line\" (value=8), but it may also be in a low power "
+          "state (AdditonalAvailability value=14), or the Device "
+          "could be running Diagnostics (AdditionalAvailability "
+          "value=5, \"In Test\")." ), 
+       ValueMap { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", 
+          "11", "12", "13", "14", "15", "16", "17", "18", "19", 
+          "20", "21" }, 
+       Values { "Other", "Unknown", "Running/Full Power", "Warning", 
+          "In Test", "Not Applicable", "Power Off", "Off Line", 
+          "Off Duty", "Degraded", "Not Installed", "Install Error", 
+          "Power Save - Unknown", "Power Save - Low Power Mode", 
+          "Power Save - Standby", "Power Cycle", 
+          "Power Save - Warning", "Paused", "Not Ready", 
+          "Not Configured", "Quiesced" }, 
+       ModelCorrespondence { "CIM_LogicalDevice.Availability" }]
+   uint16 AdditionalAvailability[];
+
+      [Deprecated { "No value" }, 
+       Description ( 
+          "The MaxQuiesceTime property has been deprecated. When "
+          "evaluating the use of Quiesce, it was determine that "
+          "this single property is not adequate for describing when "
+          "a device will automatically exit a quiescent state. In "
+          "fact, the most likely scenario for a device to exit a "
+          "quiescent state was determined to be based on the number "
+          "of outstanding requests queued rather than on a maximum "
+          "time. This will be re-evaluated and repositioned later. \n"
+          "Maximum time in milliseconds, that a Device can run in a "
+          "\"Quiesced\" state. A Device\'s state is defined in its "
+          "Availability and AdditionalAvailability properties, "
+          "where \"Quiesced\" is conveyed by the value 21. What "
+          "occurs at the end of the time limit is device-specific. "
+          "The Device may unquiesce, may offline or take other "
+          "action. A value of 0 indicates that a Device can remain "
+          "quiesced indefinitely." ), 
+       Units ( "MilliSeconds" )]
+   uint64 MaxQuiesceTime;
+
+
+      [Deprecated { "CIM_PowerManagementService.SetPowerState" }, 
+       Description ( 
+          "Sets the power state of the Device. The use of this "
+          "method has been deprecated. Instead, use the "
+          "SetPowerState method in the associated "
+          "PowerManagementService class." )]
+   uint32 SetPowerState(
+         [IN, Description ( "The power state to set." ), 
+          ValueMap { "1", "2", "3", "4", "5", "6" }, 
+          Values { "Full Power", "Power Save - Low Power Mode", 
+             "Power Save - Standby", "Power Save - Other", 
+             "Power Cycle", "Power Off" }]
+      uint16 PowerState, 
+         [IN, Description ( 
+             "Time indicates when the power state should be set, "
+             "either as a regular date-time value or as an "
+             "interval value (where the interval begins when the "
+             "method invocation is received." )]
+      datetime Time);
+
+      [Description ( 
+          "Requests a reset of the LogicalDevice. The return value "
+          "should be 0 if the request was successfully executed, 1 "
+          "if the request is not supported and some other value if "
+          "an error occurred. In a subclass, the set of possible "
+          "return codes could be specified, using a ValueMap "
+          "qualifier on the method. The strings to which the "
+          "ValueMap contents are \'translated\' may also be "
+          "specified in the subclass as a Values array qualifier." )]
+   uint32 Reset(
+);
+
+      [Deprecated { "CIM_EnabledLogicalElement.RequestStateChange" }, 
+       Description ( 
+          "The EnableDevice method has been deprecated in lieu of "
+          "the more general RequestStateChange method that directly "
+          "overlaps with the functionality provided by this method. \n"
+          "Requests that the LogicalDevice be enabled (\"Enabled\" "
+          "input parameter = TRUE) or disabled (= FALSE). If "
+          "successful, the Device\'s StatusInfo/EnabledState "
+          "properties should reflect the desired state "
+          "(enabled/disabled). Note that this method\'s function "
+          "overlaps with the RequestedState property. "
+          "RequestedState was added to the model to maintain a "
+          "record (i.e., a persisted value) of the last state "
+          "request. Invoking the EnableDevice method should set the "
+          "RequestedState property appropriately. \n"
+          "The return code should be 0 if the request was "
+          "successfully executed, 1 if the request is not supported "
+          "and some other value if an error occurred. In a "
+          "subclass, the set of possible return codes could be "
+          "specified, using a ValueMap qualifier on the method. The "
+          "strings to which the ValueMap contents are \'translated\' "
+          "may also be specified in the subclass as a Values array "
+          "qualifier." )]
+   uint32 EnableDevice(
+         [IN, Description ( 
+             "If TRUE enable the device, if FALSE disable the device."
+              )]
+      boolean Enabled);
+
+      [Deprecated { "CIM_EnabledLogicalElement.RequestStateChange" }, 
+       Description ( 
+          "The OnlineDevice method has been deprecated in lieu of "
+          "the more general RequestStateChange method that directly "
+          "overlaps with the functionality provided by this method. \n"
+          "Requests that the LogicalDevice be brought online "
+          "(\"Online\" input parameter = TRUE) or taken offline (= "
+          "FALSE). \"Online\" indicates that the Device is ready to "
+          "accept requests, and is operational and fully "
+          "functioning. In this case, the Device\'s Availability "
+          "property would be set to a value of 3 (\"Running/Full "
+          "Power\"). \"Offline\" indicates that a Device is powered "
+          "up and operational, but not processing functional "
+          "requests. In an offline state, a Device may be capable "
+          "of running diagnostics or generating operational alerts. "
+          "For example, when the \"Offline\" button is pushed on a "
+          "Printer, the Device is no longer available to process "
+          "print jobs, but could be available for diagnostics or "
+          "maintenance. \n"
+          "If this method is successful, the Device\'s Availability "
+          "and AdditionalAvailability properties should reflect the "
+          "updated status. If a failure occurs trying to bring the "
+          "Device online or offline, it should remain in its "
+          "current state. IE, the request, if unsuccessful, should "
+          "not leave the Device in an indeterminate state. When "
+          "bringing a Device back \"Online\", from an \"Offline\" "
+          "mode, the Device should be restored to its last \"Online\" "
+          "state, if at all possible. Only a Device that has an "
+          "EnabledState/StatusInfo of \"Enabled\" and has been "
+          "configured can be brought online or taken offline. \n"
+          "OnlineDevice should return 0 if successful, 1 if the "
+          "request is not supported at all, 2 if the request is not "
+          "supported due to the current state of the Device, and "
+          "some other value if any other error occurred. In a "
+          "subclass, the set of possible return codes could be "
+          "specified, using a ValueMap qualifier on the method. The "
+          "strings to which the ValueMap contents are \'translated\' "
+          "may also be specified in the subclass as a Values array "
+          "qualifier. \n"
+          "Note that this method\'s function overlaps with the "
+          "RequestedState property. RequestedState was added to the "
+          "model to maintain a record (i.e., a persisted value) of "
+          "the last state request. Invoking the OnlineDevice method "
+          "should set the RequestedState property appropriately." )]
+   uint32 OnlineDevice(
+         [IN, Description ( 
+             "If TRUE, take the device online, if FALSE, take "
+             "the device OFFLINE." )]
+      boolean Online);
+
+      [Deprecated { "CIM_EnabledLogicalElement.RequestStateChange" }, 
+       Description ( 
+          "The QuiesceDevice method has been deprecated in lieu of "
+          "the more general RequestStateChange method that directly "
+          "overlaps with the functionality provided by this method. \n"
+          "Requests that the LogicalDevice cleanly cease all "
+          "current activity (\"Quiesce\" input parameter = TRUE) or "
+          "resume activity (= FALSE). For this method to quiesce a "
+          "Device, that Device should have an Availability (or "
+          "Additional Availability) of \"Running/Full Power\" "
+          "(value=3) and an EnabledStatus/StatusInfo of \"Enabled\". "
+          "For example, if quiesced, a Device may then be offlined "
+          "for diagnostics, or disabled for power off and hot swap. "
+          "For the method to \"unquiesce\" a Device, that Device "
+          "should have an Availability (or AdditionalAvailability) "
+          "of \"Quiesced\" (value=21) and an "
+          "EnabledStatus/StatusInfo of \"Enabled\". In this case, "
+          "the Device would be returned to an \"Enabled\" and "
+          "\"Running/Full Power\" status. \n"
+          "The method\'s return code should indicate the success or "
+          "failure of the quiesce. It should return 0 if "
+          "successful, 1 if the request is not supported at all, 2 "
+          "if the request is not supported due to the current state "
+          "of the Device, and some other value if any other error "
+          "occurred. In a subclass, the set of possible return "
+          "codes could be specified, using a ValueMap qualifier on "
+          "the method. The strings to which the ValueMap contents "
+          "are \'translated\' may also be specified in the subclass "
+          "as a Values array qualifier." )]
+   uint32 QuiesceDevice(
+         [IN, Description ( 
+             "If set to TRUE then cleanly cease all activity, if "
+             "FALSE resume activity." )]
+      boolean Quiesce);
+
+      [Description ( 
+          "Requests that the Device capture its current "
+          "configuration, setup and/or state information in a "
+          "backing store. The goal would be to use this information "
+          "at a later time (via the RestoreProperties method), to "
+          "return a Device to its present \"condition\". This "
+          "method may not be supported by all Devices. The method "
+          "should return 0 if successful, 1 if the request is not "
+          "supported, and some other value if any other error "
+          "occurred. In a subclass, the set of possible return "
+          "codes could be specified, using a ValueMap qualifier on "
+          "the method. The strings to which the ValueMap contents "
+          "are \'translated\' may also be specified in the subclass "
+          "as a Values array qualifier." )]
+   uint32 SaveProperties(
+);
+
+      [Description ( 
+          "Requests that the Device re-establish its configuration, "
+          "setup and/or state information from a backing store. The "
+          "intent is to capture this information at an earlier time "
+          "(via the SaveProperties method), and use it to return a "
+          "Device to this earlier \"condition\". This method may "
+          "not be supported by all Devices. The method should "
+          "return 0 if successful, 1 if the request is not "
+          "supported, and some other value if any other error "
+          "occurred. In a subclass, the set of possible return "
+          "codes could be specified, using a ValueMap qualifier on "
+          "the method. The strings to which the ValueMap contents "
+          "are \'translated\' may also be specified in the subclass "
+          "as a Values array qualifier." )]
+   uint32 RestoreProperties(
+);
+
+};
+
+
+// Copyright (c) 2011 DMTF.  All rights reserved.
+   [Version ( "2.29.0" ), 
+    UMLPackagePath ( "CIM::Core::StorageExtent" ), 
+    Description ( 
+       "StorageExtent describes the capabilities and management of the "
+       "various media that exist to store data and allow data "
+       "retrieval. This superclass could be used to represent the "
+       "various components of RAID (Hardware or Software) or as a raw "
+       "logical extent on top of physical media." )]
+class CIM_StorageExtent : CIM_LogicalDevice {
+
+      [Description ( "Type of data organization used." ), 
+       ValueMap { "0", "1", "2", "3", "4" }, 
+       Values { "Other", "Unknown", "Fixed Block", "Variable Block", 
+          "Count Key Data" }]
+   uint16 DataOrganization;
+
+      [Description ( 
+          "A free form string describing the media and/or its use." ), 
+       MappingStrings { "MIB.IETF|HOST-RESOURCES-MIB.hrStorageDescr" }]
+   string Purpose;
+
+      [Description ( 
+          "Access describes whether the media is readable "
+          "(value=1), writeable (value=2), or both (value=3). "
+          "\"Unknown\" (0) and \"Write Once\" (4) can also be "
+          "defined." ), 
+       ValueMap { "0", "1", "2", "3", "4" }, 
+       Values { "Unknown", "Readable", "Writeable", 
+          "Read/Write Supported", "Write Once" }]
+   uint16 Access;
+
+      [Description ( 
+          "ErrorMethodology is a free-form string describing the "
+          "type of error detection and correction supported by this "
+          "StorageExtent." )]
+   string ErrorMethodology;
+
+      [Description ( 
+          "Size in bytes of the blocks which form this "
+          "StorageExtent. If variable block size, then the maximum "
+          "block size in bytes should be specified. If the block "
+          "size is unknown or if a block concept is not valid (for "
+          "example, for AggregateExtents, Memory or LogicalDisks), "
+          "enter a 1." ), 
+       Units ( "Bytes" ), 
+       MappingStrings { "MIF.DMTF|Host Storage|001.4", 
+          "MIB.IETF|HOST-RESOURCES-MIB.hrStorageAllocationUnits", 
+          "MIF.DMTF|Storage Devices|001.5" }]
+   uint64 BlockSize;
+
+      [Description ( 
+          "Total number of logically contiguous blocks, of size "
+          "Block Size, which form this Extent. The total size of "
+          "the Extent can be calculated by multiplying BlockSize by "
+          "NumberOfBlocks. If the BlockSize is 1, this property is "
+          "the total size of the Extent." ), 
+       MappingStrings { "MIF.DMTF|Host Storage|001.5", 
+          "MIB.IETF|HOST-RESOURCES-MIB.hrStorageSize" }]
+   uint64 NumberOfBlocks;
+
+      [Description ( 
+          "The maximum number of blocks, of size BlockSize, which "
+          "are available for consumption when layering "
+          "StorageExtents using the BasedOn association. This "
+          "property only has meaning when this StorageExtent is an "
+          "Antecedent reference in a BasedOn relationship. For "
+          "example, a StorageExtent could be composed of 120 "
+          "blocks. However, the Extent itself may use 20 blocks for "
+          "redundancy data. If another StorageExtent is BasedOn "
+          "this Extent, only 100 blocks would be available to it. "
+          "This information (\'100 blocks is available for "
+          "consumption\') is indicated in the ConsumableBlocks "
+          "property." )]
+   uint64 ConsumableBlocks;
+
+      [Description ( 
+          "True indicates that the underlying StorageExtent(s) "
+          "participate in a StorageRedundancyGroup." )]
+   boolean IsBasedOnUnderlyingRedundancy;
+
+      [Description ( 
+          "Boolean set to TRUE if the Storage is sequentially "
+          "accessed by a MediaAccessDevice. A TapePartition is an "
+          "example of a sequentially accessed StorageExtent. "
+          "StorageVolumes, Disk Partitions and LogicalDisks "
+          "represent randomly accessed Extents." )]
+   boolean SequentialAccess;
+
+      [Description ( 
+          "StorageExtents have additional status information beyond "
+          "that captured in the OperationalStatus and other "
+          "properties, inherited from ManagedSystemElement. This "
+          "additional information (for example, \"Protection "
+          "Disabled\", value=9) is captured in the ExtentStatus "
+          "property. \n"
+          "\'In-Band Access Granted\' says that access to data on "
+          "an extent is granted to some consumer and is only valid "
+          "when \'Exported\' is also set. It is set as a side "
+          "effect of PrivilegeManagementService.ChangeAccess or "
+          "equivalent interfaces. \n"
+          "\'Imported\' indicates that the extent is used in the "
+          "current system, but known to be managed by some other "
+          "system. For example, a server imports volumes from a "
+          "disk array. \n"
+          "\'Exported\' indicates the extent is meant to be used by "
+          "some comsumer. A disk array\'s logical units are "
+          "exported. \n"
+          "Intermediate composite extents may be neither imported "
+          "nor exported.\n"
+          "\'Relocating\' indicates the extent is being relocated." ), 
+       ValueMap { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", 
+          "10", "11", "12", "13", "14", "15", "16", "17", "18", 
+          "..", "32768..65535" }, 
+       Values { "Other", "Unknown", "None/Not Applicable", "Broken", 
+          "Data Lost", "Dynamic Reconfig", "Exposed", 
+          "Fractionally Exposed", "Partially Exposed", 
+          "Protection Disabled", "Readying", "Rebuild", 
+          "Recalculate", "Spare in Use", "Verify In Progress", 
+          "In-Band Access Granted", "Imported", "Exported", 
+          "Relocating", "DMTF Reserved", "Vendor Reserved" }]
+   uint16 ExtentStatus[];
+
+      [Description ( 
+          "Indicates whether or not there exists no single point of failure."
+           ), 
+       ModelCorrespondence { 
+          "CIM_StorageSetting.NoSinglePointOfFailure" }]
+   boolean NoSinglePointOfFailure;
+
+      [Description ( 
+          "Number of complete copies of data currently maintained." ), 
+       ModelCorrespondence { 
+          "CIM_StorageSetting.DataRedundancyGoal", 
+          "CIM_StorageSetting.DataRedundancyMax", 
+          "CIM_StorageSetting.DataRedundancyMin" }]
+   uint16 DataRedundancy;
+
+      [Description ( 
+          "How many physical packages can currently fail without "
+          "data loss. For example, in the storage domain, this "
+          "might be disk spindles." ), 
+       ModelCorrespondence { 
+          "CIM_StorageSetting.PackageRedundancyGoal", 
+          "CIM_StorageSetting.PackageRedundancyMax", 
+          "CIM_StorageSetting.PackageRedundancyMin" }]
+   uint16 PackageRedundancy;
+
+      [Description ( 
+          "Current value for Delta reservation. This is a "
+          "percentage that specifies the amount of space that "
+          "should be reserved in a replica for caching changes." ), 
+       Units ( "Percentage" ), 
+       MinValue ( 1 ), 
+       MaxValue ( 100 ), 
+       ModelCorrespondence { 
+          "CIM_StorageSetting.DeltaReservationGoal", 
+          "CIM_StorageSetting.DeltaReservationMax", 
+          "CIM_StorageSetting.DeltaReservationMin" }]
+   uint8 DeltaReservation;
+
+      [Description ( 
+          "If true, \"Primordial\" indicates that the containing "
+          "System does not have the ability to create or delete "
+          "this operational element. This is important because "
+          "StorageExtents are assembled into higher-level "
+          "abstractions using the BasedOn association. Although the "
+          "higher-level abstractions can be created and deleted, "
+          "the most basic, (i.e. primordial), hardware-based "
+          "storage entities cannot. They are physically realized as "
+          "part of the System, or are actually managed by some "
+          "other System and imported as if they were physically "
+          "realized. In other words, a Primordial StorageExtent "
+          "exists in, but is not created by its System and "
+          "conversely a non-Primordial StorageExtent is created in "
+          "the context of its System. For StorageVolumes, this "
+          "property will generally be false. One use of this "
+          "property is to enable algorithms that aggregate "
+          "StorageExtent.ConsumableSpace across all, StorageExtents "
+          "but that also want to distinquish the space that "
+          "underlies Primordial StoragePools. Since implementations "
+          "are not required to surface all Component StorageExtents "
+          "of a StoragePool, this information is not accessible in "
+          "any other way." )]
+   boolean Primordial = false;
+
+      [Override ( "Name" ), 
+       Description ( "A unique identifier for the Extent." ), 
+       MappingStrings { 
+          "SPC.INCITS-T10| VPD 83, Association 0 | Identifier" }, 
+       ModelCorrespondence { "CIM_StorageExtent.NameFormat", 
+          "CIM_StorageExtent.NameNamespace" }]
+   string Name;
+
+      [Description ( 
+          "The list here applies to all StorageExtent subclasses. "
+          "Please look at the Description in each subclass for "
+          "guidelines on the approriate values for that subclass. "
+          "Note that any of these formats could apply to a "
+          "CompositeExtent. \n"
+          "\n"
+          "Note - this property originally touched on two concepts "
+          "that are now separated into this property and "
+          "NameNamespace. Values 2,3,4,5,6, and 8 are retained for "
+          "backwards compatibility but are deprecated in lieu of "
+          "the corresponding values in "
+          "CIM_StorageExtent.NameNamespace. \n"
+          "\n"
+          "For example, the preferred source for SCSI virtual "
+          "(RAID) disk names is from Inquiry VPD page 83 response, "
+          "type 3 identifiers. These will have NameFormat set to "
+          "\'NAA\' and NameNamespace to \'VPD83Type3\'. \n"
+          "\n"
+          "Format of the Name property. Values for extents "
+          "representing SCSI volumes are (per SCSI SPC-3): \n"
+          "2 = VPD Page 83, NAA IEEE Registered Extended "
+          "(VPD83NAA6) \n"
+          "(DEPRECATED) \n"
+          "3 = VPD Page 83, NAA IEEE Registered (VPD83NAA5) \n"
+          "(DEPRECATED) \n"
+          "4 = VPD Page 83, (VPD83Type2) (DEPRECATED) \n"
+          "5 = VPD Page 83, \n"
+          "T10 Vendor Identification (VPD83Type1) (DEPRECATED) \n"
+          "6 = VPD Page 83, Vendor Specific (VPD83Type0) "
+          "(DEPRECATED) \n"
+          "7 = Serial Number/Vendor/Model (SNVM) SNVM is 3 strings "
+          "representing the vendor name, product name within the "
+          "vendor namespace, and the serial number within the model "
+          "namespace. Strings are delimited with a \'+\'. Spaces "
+          "may be included and are significant. The serial number "
+          "is the text representation of the serial number in "
+          "hexadecimal upper case. This represents the vendor and "
+          "model ID from SCSI Inquiry data; the vendor field MUST "
+          "be 8 characters wide and the product field MUST be 16 "
+          "characters wide. For example, \n"
+          "\'ACME____+SUPER DISK______+124437458\' (_ is a space "
+          "character) \n"
+          "8 = Node WWN (for single LUN/controller) (NodeWWN) \n"
+          "(DEPRECATED) \n"
+          "9 = NAA as a generic format. See \n"
+          "http://standards.ieee.org/regauth/oui/tutorials/fibrecomp_id.html. "
+          "Formatted as 16 or 32 unseparated uppercase hex "
+          "characters (2 per binary byte). For example "
+          "\'21000020372D3C73\' \n"
+          "10 = EUI as a generic format (EUI64) See \n"
+          "http://standards.ieee.org/regauth/oui/tutorials/EUI64.html. \n"
+          "Formatted as 16 unseparated uppercase hex characters (2 "
+          "per binary byte) \n"
+          "11 = T10 vendor identifier format as returned by SCSI "
+          "Inquiry VPD page 83, identifier type 1. See T10 SPC-3 "
+          "specification. This is the 8-byte ASCII vendor ID from "
+          "the T10 registry followed by a vendor specific ASCII "
+          "identifier; spaces are permitted. For non SCSI volumes, "
+          "\'SNVM\' may be the most appropriate choice. 12 = OS "
+          "Device Name (for LogicalDisks). See LogicalDisk Name "
+          "description for details." ), 
+       ValueMap { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", 
+          "10", "11", "12" }, 
+       Values { "Unknown", "Other", "VPD83NAA6", "VPD83NAA5", 
+          "VPD83Type2", "VPD83Type1", "VPD83Type0", "SNVM", 
+          "NodeWWN", "NAA", "EUI64", "T10VID", "OS Device Name" }, 
+       ModelCorrespondence { "CIM_StorageExtent.Name", 
+          "CIM_StorageExtent.NameNamespace", 
+          "CIM_StorageExtent.OtherNameFormat" }]
+   uint16 NameFormat;
+
+      [Description ( 
+          "The preferred source SCSI for volume names is SCSI VPD "
+          "Page 83 responses. Page 83 returns a list of identifiers "
+          "for various device elements. The metadata for each "
+          "identifier includes an Association field, identifiers "
+          "with association of 0 apply to volumes. Page 83 supports "
+          "several namespaces specified in the Type field in the "
+          "identifier metadata. See SCSI SPC-3 specification. \n"
+          "2 = VPD Page 83, Type 3 NAA (NameFormat SHOULD be NAA) \n"
+          "3 = VPD Page 83, Type 2 EUI64 (NameFormat EUI) \n"
+          "4 = VPD Page 83, Type 1 T10 Vendor Identification \n"
+          "(NameFormat T10) \n"
+          "Less preferred volume namespaces from other interfaces: \n"
+          "5 = VPD page 80, Serial number (NameFormat SHOULD be "
+          "Other) \n"
+          "6 = FC NodeWWN (NameFormat SHOULD be NAA or EUI) \n"
+          "7 = Serial Number/Vendor/Model (NameFormat SHOULD be "
+          "SNVM) \n"
+          "The preferred namespace for LogigicalDisk names is "
+          "platform specific device namespace; see LogigicalDIsk "
+          "Description. \n"
+          "8 = OS Device Namespace." ), 
+       ValueMap { "0", "1", "2", "3", "4", "5", "6", "7", "8" }, 
+       Values { "Unknown", "Other", "VPD83Type3", "VPD83Type2", 
+          "VPD83Type1", "VPD80", "NodeWWN", "SNVM", 
+          "OS Device Namespace" }, 
+       MappingStrings { 
+          "SPC.INCITS-T10| VPD 83, Association 0 | Identifier" }, 
+       ModelCorrespondence { "CIM_StorageExtent.Name", 
+          "CIM_StorageExtent.OtherNameNamespace", 
+          "CIM_StorageExtent.NameFormat" }]
+   uint16 NameNamespace;
+
+      [Description ( 
+          "A string describing the namespace of the Name property "
+          "when NameNamespace includes the value 1, \"Other\"." ), 
+       ModelCorrespondence { "CIM_StorageExtent.NameNamespace" }]
+   string OtherNameNamespace;
+
+      [Description ( 
+          "A string describing the format of the Name property when "
+          "NameFormat includes the value 1, \"Other\"." ), 
+       ModelCorrespondence { "CIM_StorageExtent.NameFormat" }]
+   string OtherNameFormat;
+
+
+};
+
+
+// ===================================================================
+//  UNIX_LogicalDisk
+// ===================================================================
+   [Version ("2.2.0"), Description (
+     "Each instance of the PG_UnixProcess class represents a single "
+     "instance of a running program. A user of the Operating System "
+     "will typically see a Process as an application or task. Within "
+     "an OperatingSystem, a Process is defined by a workspace of "
+     "memory resources and environmental settings that are allocated "
+     "to it. On a multitasking System, this workspace prevents "
+     "intrusion of resources by other Processes. Additionally, a "
+     "Process can execute as multiple Threads, all which run within "
+     "the same workspace.") ]
+class UNIX_LogicalDisk : CIM_LogicalDisk {
+   [Description ( 
+          "Boolean indicating that the Device is compressed. " )]
+   boolean Compressed;
+
+   [Description ( 
+          "Boolean indicating that the Device is jailed. " )]
+   boolean Isolated;
+
+   [Description ( 
+          "Boolean indicating that the Device nodes can be executed. " )]
+   boolean Executable;
+
+   [Description ( 
+          "Boolean indicating that the Device is checksumed. " )]
+   boolean Checksum;
+
+   [Description ( 
+          "Boolean indicating that the Device nodes are deduplicated. " )]
+   boolean DuplicationEnabled;
+ };
+
+// =============================================================================
+// end of file
+// =============================================================================
