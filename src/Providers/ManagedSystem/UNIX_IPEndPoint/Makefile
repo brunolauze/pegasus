@@ -43,7 +43,7 @@ DIR = Providers/ManagedSystem/UNIX_IPEndPoint
 
 include $(ROOT)/mak/config.mak
 
-LIBRARY = UNIX_IPEndPointModule
+LIBRARY = UNIX_IPEndPointProvider
 
 EXTRA_INCLUDES = -I./../UNIX_Common
 

@@ -43,7 +43,7 @@ DIR = Providers/ManagedSystem/UNIX_NTPService
 
 include $(ROOT)/mak/config.mak
 
-LIBRARY = UNIX_NTPServiceModule
+LIBRARY = UNIX_NTPServiceProvider
 
 EXTRA_INCLUDES = \
 	-I./../UNIX_Common

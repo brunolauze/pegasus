@@ -43,7 +43,7 @@ DIR = Providers/ManagedSystem/UNIX_DNSService
 
 include $(ROOT)/mak/config.mak
 
-LIBRARY = UNIX_DNSServiceModule
+LIBRARY = UNIX_DNSServiceProvider
 
 EXTRA_INCLUDES = -I./../UNIX_Common
 

@@ -43,7 +43,7 @@ DIR = Providers/ManagedSystem/UNIX_Process
 
 include $(ROOT)/mak/config.mak
 
-LIBRARY = UNIX_ProcessModule
+LIBRARY = UNIX_ProcessProvider
 
 EXTRA_INCLUDES = -I./../UNIX_Common
 

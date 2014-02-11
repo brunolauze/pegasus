@@ -43,7 +43,7 @@ DIR = Providers/ManagedSystem/UNIX_LocalTime
 
 include $(ROOT)/mak/config.mak
 
-LIBRARY = UNIX_LocalTimeModule
+LIBRARY = UNIX_LocalTimeProvider
 
 EXTRA_INCLUDES =
 

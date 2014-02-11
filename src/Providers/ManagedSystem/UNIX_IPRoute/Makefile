@@ -43,7 +43,7 @@ DIR = Providers/ManagedSystem/UNIX_IPRoute
 
 include $(ROOT)/mak/config.mak
 
-LIBRARY = UNIX_IPRouteModule
+LIBRARY = UNIX_IPRouteProvider
 
 EXTRA_INCLUDES = -I./../UNIX_Common
 

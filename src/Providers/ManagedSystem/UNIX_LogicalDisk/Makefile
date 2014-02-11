@@ -43,7 +43,7 @@ DIR = Providers/ManagedSystem/UNIX_LogicalDisk
 
 include $(ROOT)/mak/config.mak
 
-LIBRARY = UNIX_LogicalDiskModule
+LIBRARY = UNIX_LogicalDiskProvider
 
 EXTRA_INCLUDES = \
 	-I./../UNIX_Common \

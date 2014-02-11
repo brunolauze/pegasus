@@ -43,7 +43,7 @@ DIR = Providers/ManagedSystem/UNIX_Account
 
 include $(ROOT)/mak/config.mak
 
-LIBRARY = UNIX_AccountModule
+LIBRARY = UNIX_AccountProvider
 
 EXTRA_INCLUDES = -I./../UNIX_Common
 

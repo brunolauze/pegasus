@@ -43,7 +43,7 @@ DIR = Providers/ManagedSystem/UNIX_ComputerSystem
 
 include $(ROOT)/mak/config.mak
 
-LIBRARY = UNIX_ComputerSystemModule
+LIBRARY = UNIX_ComputerSystemProvider
 
 EXTRA_INCLUDES = -I./../UNIX_Common
 
